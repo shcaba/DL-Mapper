@@ -72,7 +72,7 @@ shinyServer(function(input, output,session) {
         ### Run quadplot ####
             DL_parcoor<-archtypes.scores()
             DL_parcoor<-rbind(DL_parcoor,DL_parcoor[1,])
-            DL_parcoor[nrow(DL_parcoor),]<-data.frame(input$Spp_lab,input$D_type,input$D_prez,input$D_bias,input$D_spp,input$D_spatial,input$D_temp,input$R_time,input$R_funds,input$R_cap,input$R_an2stocks)
+            DL_parcoor[nrow(DL_parcoor),]<-data.frame(input$fishery_choice,input$D_type,input$D_prez,input$D_bias,input$D_spp,input$D_spatial,input$D_temp,input$R_time,input$R_funds,input$R_cap,input$R_an2stocks)
             DR_plot<-data.frame(Scenario=DL_parcoor$Scenario,Data=rowMeans(DL_parcoor[,2:7]),Resources=rowMeans(DL_parcoor[,9:11]))
         res<-ggplotly(ggplot(DR_plot,aes(Data,Resources,color=Scenario))+
             geom_point(size=4)+
