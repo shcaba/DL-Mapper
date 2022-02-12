@@ -30,13 +30,10 @@ shinyUI(fluidPage(
             br(),
             
             h4(p(strong("Use the slide bar to score each attribute"))),
-            h4(p(strong("Three plots are created in the main panel:"))),
-            tags$ul(tags$li(h4(p(em("A biplot with the average data and resource scores on each axis for comparisons across fisheries"))))),
-            tags$ul(tags$li(h4(p(em("A parallel coordinate plot detailing attribute comparisons across fisheries"))))),
-            tags$ul(tags$li(h4(p(em("A lollipop plot detailing attribute scores for a specific fishery"))))),
             
             br(),
-            fluidRow(column(width=12,textInput("Spp_lab","Species name for label", value="Sp_X"))),
+            fluidRow(column(width=12,textInput("Spp_lab","Species name for label", value=NULL))),
+            fluidRow(column(width=12,selectizeInput("fishery_choice", label=NULL,choices = NULL))),
             h3(p(strong("Data Attributes"))),
             fluidRow(column(width=6,sliderInput("D_type",
                         "Types:",
@@ -104,12 +101,25 @@ shinyUI(fluidPage(
 
         # Show a plot of the generated distribution
         mainPanel(
-            plotOutput("LolliPlot"),
-            downloadButton('downloadlollipopplots', 'Download Lollipop plot'),
             br(),
             br(),
             br(),
-            plotOutput("QuadPlot"),
+            br(),
+            h4(p(strong("Three plots are created in the main panel:"))),
+            tags$ul(tags$li(h4(p(em("A lollipop plot detailing attribute scores for a specific fishery"))))),
+            tags$ul(tags$li(h4(p(em("A biplot with the average data and resource scores on each axis for comparisons across fisheries"))))),
+            tags$ul(tags$li(h4(p(em("A parallel coordinate plot detailing attribute comparisons across fisheries"))))),
+            fluidRow(column(width=6,h3("Plot of individual attribute scores", align = "center")),
+                     column(width=6,h3("Biplot of average data and resource attribute scores", align = "center"))),
+            fluidRow(column(width=6,plotOutput("LolliPlot")),
+                     column(width=6,plotlyOutput("QuadPlot"))),
+                    downloadButton('downloadlollipopplots', 'Download Lollipop plot'),
+            br(),
+            br(),
+            br(),
+            h3("Comparison of attribute scores across examples fisheries", align = "left"),
+            h4("Attribute values can be highlighted by dragging the cursor across values", align = "left"),
+            h4("Only those fisheries that meet all highlighted values will be emphasized", align = "left"),
             plotlyOutput("ParCoorPlot")
         )
     )
