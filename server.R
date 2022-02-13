@@ -31,7 +31,7 @@ shinyServer(function(input, output,session) {
       #                              c(runif(dnum,2,3),runif(rnum,0,1))),
                                   4,dnum+rnum,byrow = TRUE))
         colnames(scores)<-c("Data: Type","Data: Precision","Data: Bias","Data: Species ID","Data: Temporal","Data: Coverage","Res: Time","Res: Funding","Res: Capacity","Res: analysts/stocks")
-        DL_parcoor<-data.frame(Scenario=c("No constraints","Resources constraints","Data constraints","Data & Resource constraints"),scores)
+        DL_parcoor<-data.frame(Scenario=c("No constraints","Resources constraints","Data constraints","Data & Resource constraints"),Shapes=21,scores)
         return(DL_parcoor)
     }
     ###############
@@ -44,6 +44,7 @@ shinyServer(function(input, output,session) {
         #Lollipop
         DL_parcoor<-archtypes.scores()
         DL_parcoor<-rbind(DL_parcoor,DL_parcoor[1,])
+        DL_parcoor<-DL_parcoor[,-2]
         DL_parcoor[nrow(DL_parcoor),]<-data.frame(input$Spp_lab,input$D_type,input$D_prez,input$D_bias,input$D_spp,input$D_spatial,input$D_temp,input$R_time,input$R_funds,input$R_cap,input$R_an2stocks)
         DR_plot_lollipop<-melt(DL_parcoor)
         DR_plot_lollipop$Type<-"A"
@@ -72,10 +73,10 @@ shinyServer(function(input, output,session) {
         ### Run quadplot ####
             DL_parcoor<-archtypes.scores()
             DL_parcoor<-rbind(DL_parcoor,DL_parcoor[1,])
-            DL_parcoor[nrow(DL_parcoor),]<-data.frame(input$fishery_choice,input$D_type,input$D_prez,input$D_bias,input$D_spp,input$D_spatial,input$D_temp,input$R_time,input$R_funds,input$R_cap,input$R_an2stocks)
-            DR_plot<-data.frame(Scenario=DL_parcoor$Scenario,Data=rowMeans(DL_parcoor[,2:7]),Resources=rowMeans(DL_parcoor[,9:11]))
-        res<-ggplotly(ggplot(DR_plot,aes(Data,Resources,color=Scenario))+
-            geom_point(size=4)+
+            DL_parcoor[nrow(DL_parcoor),]<-data.frame(input$fishery_choice,8,input$D_type,input$D_prez,input$D_bias,input$D_spp,input$D_spatial,input$D_temp,input$R_time,input$R_funds,input$R_cap,input$R_an2stocks)
+            DR_plot<-data.frame(Scenario=DL_parcoor$Scenario,Shapes=DL_parcoor$Shapes,Data=rowMeans(DL_parcoor[,3:8]),Resources=rowMeans(DL_parcoor[,9:12]))
+        res<-ggplotly(ggplot(DR_plot,aes(Data,Resources,fill=Scenario))+
+            geom_point(size=4,shape=DR_plot$Shapes)+
             theme(legend.position = "none")+
             geom_vline(xintercept=1.5,color="red",lty=2)+
             geom_hline(yintercept=1.5,color="red",lty=2))
@@ -85,7 +86,8 @@ shinyServer(function(input, output,session) {
     output$ParCoorPlot <- renderPlotly({
         DL_parcoor<-archtypes.scores()
         DL_parcoor<-rbind(DL_parcoor,DL_parcoor[1,])
-        DL_parcoor[nrow(DL_parcoor),]<-data.frame(input$Spp_lab,input$D_type,input$D_prez,input$D_bias,input$D_spp,input$D_spatial,input$D_temp,input$R_time,input$R_funds,input$R_cap,input$R_an2stocks)
+        DL_parcoor<-DL_parcoor[,-2]
+        DL_parcoor[nrow(DL_parcoor),]<-data.frame(input$Spp_lab,8,input$D_type,input$D_prez,input$D_bias,input$D_spp,input$D_spatial,input$D_temp,input$R_time,input$R_funds,input$R_cap,input$R_an2stocks)
         plot_ly(DL_parcoor,type = 'parcoords', 
                        line = list(list(color = ~Scenario,
                                         colorscale = list(c(0, 'red'), c(0.5, 'green'), c(1, 'blue')))),
