@@ -87,10 +87,11 @@ shinyServer(function(input, output,session) {
         DL_parcoor<-archtypes.scores()
         DL_parcoor<-rbind(DL_parcoor,DL_parcoor[1,])
         DL_parcoor<-DL_parcoor[,-2]
-        DL_parcoor[nrow(DL_parcoor),]<-data.frame(input$Spp_lab,8,input$D_type,input$D_prez,input$D_bias,input$D_spp,input$D_spatial,input$D_temp,input$R_time,input$R_funds,input$R_cap,input$R_an2stocks)
+        DL_parcoor[nrow(DL_parcoor),]<-data.frame(input$Spp_lab,input$D_type,input$D_prez,input$D_bias,input$D_spp,input$D_spatial,input$D_temp,input$R_time,input$R_funds,input$R_cap,input$R_an2stocks)
+        DL_parcoor$colorsin<-1:nrow(DL_parcoor)
         plot_ly(DL_parcoor,type = 'parcoords', 
-                       line = list(list(color = ~Scenario,
-                                        colorscale = list(c(0, 'red'), c(0.5, 'green'), c(1, 'blue')))),
+                line = list(color = ~colorsin,
+                            colorscale = list(c(0,'red'),c(1,'green'),c(2,'blue'))),
                        dimensions = list(
                            list(range = c(0,3),
                                 #constraintrange = c(0,3),
