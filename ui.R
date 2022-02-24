@@ -148,17 +148,28 @@ shinyUI(fluidPage(
             tags$ul(tags$li(h4(p(em("A biplot with the average data and resource scores on each axis for comparisons across fisheries"))))),
             tags$ul(tags$li(h4(p(em("A parallel coordinate plot detailing attribute comparisons across fisheries"))))),
             fluidRow(column(width=6,h3("Plot of individual attribute scores", align = "center")),
-                     column(width=6,h3("Biplot of average data and resource attribute scores", align = "center"))),
+                     column(width=6,h3("Plot of strategic guidance based on attribute scores", align = "center"))),
             fluidRow(column(width=6,plotOutput("LolliPlot")),
-                     column(width=6,plotlyOutput("QuadPlot"))),
-                    downloadButton('downloadlollipopplots', 'Download Lollipop plot'),
+                     column(width=6,plotOutput("LolliPlot.principles"))),
+            fluidRow(column(width=6,downloadButton('downloadlollipopplots', 'Download DL Attributes plot')),
+                     column(width=6,downloadButton('downloadlollipop.principles', 'Download Guidance plot'))),
             br(),
             br(),
             br(),
-            h3("Comparison of attribute scores across examples fisheries", align = "left"),
-            h4("Attribute values can be highlighted by dragging the cursor across values", align = "left"),
-            h4("Only those fisheries that meet all highlighted values will be emphasized", align = "left"),
-            plotlyOutput("ParCoorPlot")
+            fluidRow(column(width=4,h3("Biplot of average attribute scores", align = "center")),
+                     column(width=8,h3("Comparison of attribute scores across examples fisheries", align = "left"))),
+            #fluidRow(column(width=4,h4("")),
+            #         column(width=8,h4("Attribute values can be highlighted by dragging the cursor across values", align = "left"))),
+            #fluidRow(column(width=4,h4("")),
+            #         column(width=8,h4("Only those fisheries that meet all highlighted values will be emphasized", align = "left"))),
+            fluidRow(column(width=4,plotlyOutput("QuadPlot")),
+                     column(width=8,plotlyOutput("ParCoorPlot")))
+#            br(),
+#            br(),
+#            h3("Comparison of attribute scores across examples fisheries", align = "left"),
+#            h4("Attribute values can be highlighted by dragging the cursor across values", align = "left"),
+#            h4("Only those fisheries that meet all highlighted values will be emphasized", align = "left"),
+ #           plotlyOutput("ParCoorPlot")
         )
     )
 ))
