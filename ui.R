@@ -10,6 +10,7 @@
 library(shiny)
 library(plotly)
 library(shinyBS)
+library(shinyWidgets)
 
 
 # Define UI for application that draws a histogram
@@ -34,17 +35,26 @@ shinyUI(fluidPage(
             h4(p(strong("Use the slide bar to score each attribute"))),
             
             br(),
-            fluidRow(column(width=12,textInput("Spp_lab","Species name for label", value=NULL))),
-            fluidRow(column(width=12,selectizeInput("fishery_choice", label=NULL,choices = NULL))),
+            fluidRow(column(width=12,textInput("Spp_lab","List of fisheries", value=NULL))),
+            fluidRow(column(width=6,selectizeInput("fishery_choice", label="Which fishery to score?",choices = NULL)),
+                column(width=6,selectizeInput("fishery_compare", label="Which fisheries to compare?",choices = NULL, multiple=TRUE))),
+            
+#            actionBttn(
+ #               inputId = "Id104",
+  #              label = "Add fishery to comparison list", 
+   #             style = "material-flat",
+    #            color = "success"
+     #       ),
+            
             h3(p(strong("Data Attributes"))),
             fluidRow(column(width=6,sliderInput("D_type",
-                        "Types:",
+                        "Types",
                         min = 0,
                         max = 3,
                         step=0.01,
                         value = 0)),
             column(width=6,sliderInput("D_prez",
-                        "Imprecision:",
+                        "Imprecision",
                         min = 0,
                         max = 3,
                         step=0.01,
@@ -55,13 +65,13 @@ shinyUI(fluidPage(
                       "right", options = list(container = "body")),
 
             fluidRow(column(width=6,sliderInput("D_bias",
-                        "Bias:",
+                        "Bias",
                         min = 0,
                         max = 3,
                         step=0.01,
                         value = 0)),
             column(width=6,sliderInput("D_spp",
-                        "Species-specific:",
+                        "Species-specific",
                         min = 0,
                         max = 3,
                         step=0.01,
@@ -71,14 +81,15 @@ shinyUI(fluidPage(
             bsTooltip("D_spp", "Data not collected at the species-specific level.",
                       "right", options = list(container = "body")),
             
+            
             fluidRow(column(width=6,sliderInput("D_spatial",
-                        "Spatial limitations:",
+                        "Spatial limitations",
                         min = 0,
                         max = 3,
                         step=0.01,
                         value = 0)),
             column(width=6,sliderInput("D_temp",
-                        "Temporal limitations:",
+                        "Temporal limitations",
                         min = 0,
                         max = 3,
                         step=0.01,
