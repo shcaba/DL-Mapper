@@ -35,9 +35,9 @@ shinyUI(fluidPage(
             h4(p(strong("Use the slide bar to score each attribute"))),
             
             br(),
-            fluidRow(column(width=12,textInput("Spp_lab","List of fisheries", value=NULL))),
-            fluidRow(column(width=6,selectizeInput("fishery_choice", label="Which fishery to score?",choices = NULL)),
-                column(width=6,selectizeInput("fishery_compare", label="Which fisheries to compare?",choices = NULL, multiple=TRUE))),
+            fluidRow(column(width=12,textInput("Spp_lab","List of fisheries to score. Separate each fishery using a comma (e.g., A,B).", value=NULL))),
+            fluidRow(column(width=6,selectizeInput("fishery_choice", label="Choose which fishery to score",choices = NULL)),
+                column(width=6,selectizeInput("fishery_compare", label="Choose which fisheries to compare.",choices = NULL, multiple=TRUE))),
             
 #            actionBttn(
  #               inputId = "Id104",
