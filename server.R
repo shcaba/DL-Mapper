@@ -271,17 +271,9 @@ shinyServer(function(input, output,session) {
     
 
     output$LolliPlot.principles <- renderPlot({
-      #Lollipop
-      #DL_parcoor<-archtypes.scores()
-      #DL_parcoor<-rbind(DL_parcoor,DL_parcoor[1,])
-      #DL_parcoor<-DL_parcoor[,-2]
-      #DL_parcoor[nrow(DL_parcoor),]<-data.frame(input$Spp_lab,input$D_type,input$D_prez,input$D_bias,input$D_spp,input$D_spatial,input$D_temp,input$R_time,input$R_funds,input$R_cap,input$R_an2stocks)
       if(length(unlist(strsplit(input$Spp_lab,split=",")))==0|input$fishery_choice=="")
       {
         DL_parcoor<-archtypes.scores()[1,-c(1,2)]
-        #          DL_parcoor<-rbind(DL_parcoor,DL_parcoor[1,])
-        #          DL_parcoor<-DL_parcoor[,-c(2,3)]
-        #          DL_parcoor[nrow(DL_parcoor),]<-data.frame(input$Spp_lab,input$D_type,input$D_prez,input$D_bias,input$D_spp,input$D_spatial,input$D_temp,input$R_time,input$R_funds,input$R_cap,input$R_an2stocks)
       }
       if(length(unlist(strsplit(input$Spp_lab,split=",")))>0&input$fishery_choice!="")
       {
@@ -300,22 +292,24 @@ shinyServer(function(input, output,session) {
       DR_plot_lollipop$Type<-"A"
       DR_plot_lollipop$Type[grep("Data",DR_plot_lollipop$variable)]<-"Data"
       DR_plot_lollipop$Type[grep("Res",DR_plot_lollipop$variable)]<-"Resource"
-      #DR_plot_lollipop_sub<-subset(DR_plot_lollipop,Scenario==Scenario[nrow(DR_plot_lollipop)])
-      lolliggplot.principles<-ggplot(DR_plot_lollipop, aes(x=variable, y=value,color=Type)) +
+      Principle.names<-c("Management objs","Data training", "Improve data","Local input","Analytical training","Simple methods","Complex models","Static MMs","Dynamic CRs","Improve CIs","Improve governance")
+      Principle.scores<-rep(0,length(Principle.names))
+      Guidance_plot_lollipop<-data.frame(Names=Principle.names,Scores=Principle.scores,Type=1)
+      Lolliggplot.principles<-ggplot(Guidance_plot_lollipop, aes(x=Names, y=Scores,color=Type)) +
         geom_point(size=6) + 
         scale_y_continuous(limits=c(0,3))+
         ggtitle(input$fishery_choice)+
         coord_flip() +
-        geom_segment( aes(x=variable, xend=variable, y=0, yend=value),lwd=2)+
+        geom_segment( aes(x=Names, xend=Names, y=0, yend=Scores),lwd=2)+
         theme(legend.position = "none")+
         xlab("Attributes")+
         ylab("Score")
-      print(lolliggplot.principles)
+      print(Lolliggplot.principles)
       output$downloadlollipop.principles <- downloadHandler(
-        filename = function() { paste0('Lollipop.principles',timestamp, '.png')},
+        filename = function() { paste0('Lolliggplot.principles',timestamp, '.png')},
         content = function(file) {
           png(file, type='cairo',width=800,height=720)
-          print(lolliggplot)
+          print(Lolliggplot.principles)
           dev.off()},contentType = 'image/png') 
     })
     
