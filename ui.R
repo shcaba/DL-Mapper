@@ -148,7 +148,7 @@ shinyUI(fluidPage(
             tags$ul(tags$li(h4(p(em("A biplot with the average data and resource scores on each axis for comparisons across fisheries"))))),
             tags$ul(tags$li(h4(p(em("A parallel coordinate plot detailing attribute comparisons across fisheries"))))),
             fluidRow(column(width=6,h3("Plot of individual attribute scores", align = "center")),
-                     column(width=6,h3("Plot of strategic guidance based on attribute scores", align = "center"))),
+                     column(width=6,h3("Plot of strategic",tags$a(href="javascript:window.open('Guidance_definitions.html', '_blank','width=600,height=400')","guidance"),"based on attribute scores", align = "center"))),
             fluidRow(column(width=6,plotOutput("LolliPlot")),
                      column(width=6,plotOutput("LolliPlot.principles"))),
             fluidRow(column(width=6,downloadButton('downloadlollipopplots', 'Download DL Attributes plot')),
