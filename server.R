@@ -302,7 +302,7 @@ shinyServer(function(input, output,session) {
         coord_flip() +
         geom_segment( aes(x=Names, xend=Names, y=0, yend=Scores),lwd=2)+
         theme(legend.position = "none")+
-        xlab("Attributes")+
+        xlab("Guidance options")+
         ylab("Score")
       print(Lolliggplot.principles)
       output$downloadlollipop.principles <- downloadHandler(
