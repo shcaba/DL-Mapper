@@ -60,12 +60,11 @@ shinyServer(function(input, output,session) {
       colnames(scores)<-colnames(scores.fish)<-c("Data: Type","Data: Precision","Data: Bias","Data: Species ID","Data: Temporal","Data: Coverage","Res: Time","Res: Funding","Res: Capacity","Res: analysts/stocks")
       DL_parcoor_comp<-data.frame(Scenario=c("No constraints","Resources constraints","Data constraints","Data & Resource constraints"),Shapes=21,scores)
       DL_parcoor_comp.fish<-data.frame(Scenario=fishery.labs,Shapes=8,scores.fish)
-      
+
       #      for(i in 1:length(fishery.labs)){
  #       DL_parcoor_comp_temp<-data.frame(fishery.labs[i],Shapes=8,colnames(scores)[1]=0,colnames(scores)[2]=0,colnames(scores)[3]=0,colnames(scores)[4]=0,colnames(scores)[5]=0,colnames(scores)[6]=0,colnames(scores)[7]=0,colnames(scores)[8]=0,colnames(scores)[9]=0,colnames(scores)[10]=0))
   #    }
       DL_parcoor_comp<-rbind(DL_parcoor_comp,DL_parcoor_comp.fish)
-      print(DL_parcoor_comp)
       return(DL_parcoor_comp)
     }
     ###############
@@ -82,102 +81,132 @@ shinyServer(function(input, output,session) {
     })
     
     observeEvent(input$fishery_choice,{
+      if(any(DL_comps$scores$Scenario==input$fishery_choice)){dtype.in<-DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,3]}
+      else (dtype.in<-3)
       updateSliderInput(session,"D_type",
                         "Types",
                         min = 0,
                         max = 3,
                         step=0.01,
-                        value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,3])
-      }
+                        #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,3])
+                        value = dtype.in)
+    }
     )
     
     observeEvent(input$fishery_choice,{
+      if(any(DL_comps$scores$Scenario==input$fishery_choice)){dprez.in<-DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,4]}
+      else (dprez.in<-3)
       updateSliderInput(session,"D_prez",
                         "Imprecision",
                         min = 0,
                         max = 3,
                         step=0.01,
-                        value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,4])
-      }
+                        #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,4])
+                        value = dprez.in)
+    }
     )
     
     observeEvent(input$fishery_choice,{
+      if(any(DL_comps$scores$Scenario==input$fishery_choice)){dbias.in<-DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,5]}
+      else (dbias.in<-3)
       updateSliderInput(session,"D_bias",
                         "Bias",
                         min = 0,
                         max = 3,
                         step=0.01,
-                        value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,5])
-      }
+#                        value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,5])
+                        value = dbias.in)
+    }
     )
     
     observeEvent(input$fishery_choice,{
+      if(any(DL_comps$scores$Scenario==input$fishery_choice)){dspp.in<-DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,6]}
+      else (dspp.in<-3)
       updateSliderInput(session,"D_spp",
                         "Species-specific",
                         min = 0,
                         max = 3,
                         step=0.01,
-                        value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,6])
+                        value = dspp.in)
+      #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,6])
       }
     )
     
     observeEvent(input$fishery_choice,{
+      if(any(DL_comps$scores$Scenario==input$fishery_choice)){dspat.in<-DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,7]}
+      else (dspat.in<-3)
       updateSliderInput(session,"D_spatial",
                         "Spatial limitations",
                         min = 0,
                         max = 3,
                         step=0.01,
-                        value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,7])
+                        value = dspat.in)
+      #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,7])
       }
     )
 
     observeEvent(input$fishery_choice,{
+      if(any(DL_comps$scores$Scenario==input$fishery_choice)){dtemp.in<-DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,8]}
+      else (dtemp.in<-3)
       updateSliderInput(session,"D_temp",
                         "Temporal limitations",
                         min = 0,
                         max = 3,
                         step=0.01,
-                        value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,8])
+                        value = dtemp.in)
+      #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,8])
       }
     )
     
     observeEvent(input$fishery_choice,{
+      if(any(DL_comps$scores$Scenario==input$fishery_choice)){rtime.in<-DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,9]}
+      else (rtime.in<-3)
       updateSliderInput(session,"R_time",
                         "Time",
                         min = 0,
                         max = 3,
                         step=0.01,
-                        value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,9])
+                        value = rtime.in)
+      #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,9])
       }
     )
     
     observeEvent(input$fishery_choice,{
+      if(any(DL_comps$scores$Scenario==input$fishery_choice)){rfunds.in<-DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,10]}
+      else (rfunds.in<-3)
       updateSliderInput(session,"R_funds",
                         "Funding",
                         min = 0,
                         max = 3,
                         step=0.01,
-                        value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,10])
+                        value = rfunds.in)
+      #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,10])
       }
     )
     
     observeEvent(input$fishery_choice,{
+      if(any(DL_comps$scores$Scenario==input$fishery_choice)){rcap.in<-DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,11]}
+      else (rcap.in<-3)
       updateSliderInput(session,"R_cap",
                         "Technical capacity",
                         min = 0,
                         max = 3,
                         step=0.01,
-                        value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,11])
+                        value = rcap.in)
+      #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,11])
       }
     )
     
     observeEvent(input$fishery_choice,{
+      if(any(DL_comps$scores$Scenario==input$fishery_choice)){ranst.in<-DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,12]}
+      else (ranst.in<-3)
       updateSliderInput(session,"R_an2stocks",
                         "Analysts:Stocks",
                         min = 0,
                         max = 3,
                         step=0.01,
-                        value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,12])
+                        value = ranst.in)
+      #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,12])
       }
     )
     
@@ -229,7 +258,7 @@ shinyServer(function(input, output,session) {
         #DL_parcoor[nrow(DL_parcoor),]<-data.frame(input$Spp_lab,input$D_type,input$D_prez,input$D_bias,input$D_spp,input$D_spatial,input$D_temp,input$R_time,input$R_funds,input$R_cap,input$R_an2stocks)
       if(length(unlist(strsplit(input$Spp_lab,split=",")))==0|input$fishery_choice=="")
         {
-          DL_parcoor<-archtypes.scores()[1,-c(1,2)]
+          DL_parcoor<-archtypes.scores()[4,-c(1,2)]
 #          DL_parcoor<-rbind(DL_parcoor,DL_parcoor[1,])
 #          DL_parcoor<-DL_parcoor[,-c(2,3)]
 #          DL_parcoor[nrow(DL_parcoor),]<-data.frame(input$Spp_lab,input$D_type,input$D_prez,input$D_bias,input$D_spp,input$D_spatial,input$D_temp,input$R_time,input$R_funds,input$R_cap,input$R_an2stocks)
@@ -247,17 +276,20 @@ shinyServer(function(input, output,session) {
         }
         else(DL_parcoor<-archtypes.scores()[1,-c(1,2)])
       }
-        DR_plot_lollipop<-melt(DL_parcoor)
-        DR_plot_lollipop$Type<-"A"
-        DR_plot_lollipop$Type[grep("Data",DR_plot_lollipop$variable)]<-"Data"
-        DR_plot_lollipop$Type[grep("Res",DR_plot_lollipop$variable)]<-"Resource"
+#        DR_plot_lollipop<-melt(DL_parcoor)
+        DR_labels<-c("Data: #Types","Data: Precision","Data: Bias","Data: Spp ID","Data: Temporal","Data: Coverage", "Res: Time","Res: Funding","Res: Capacity","Res: Analysts:Stocks")
+        DR_plot_lollipop<-data.frame(Attribute=DR_labels,Score=as.numeric(DL_parcoor),Type="A")
+        DR_plot_lollipop$Attribute<-factor(DR_plot_lollipop$Attribute,levels=rev(unique(DR_plot_lollipop$Attribute)))
+#        DR_plot_lollipop$Type<-"A"
+        DR_plot_lollipop$Type[grep("Data",DR_plot_lollipop$Attribute)]<-"Data"
+        DR_plot_lollipop$Type[grep("Res",DR_plot_lollipop$Attribute)]<-"Resource"
         #DR_plot_lollipop_sub<-subset(DR_plot_lollipop,Scenario==Scenario[nrow(DR_plot_lollipop)])
-        lolliggplot<-ggplot(DR_plot_lollipop, aes(x=variable, y=value,color=Type)) +
+        lolliggplot<-ggplot(DR_plot_lollipop, aes(x=Attribute, y=Score,color=Type)) +
             geom_point(size=6) + 
             scale_y_continuous(limits=c(0,3))+
             ggtitle(input$fishery_choice)+
             coord_flip() +
-            geom_segment( aes(x=variable, xend=variable, y=0, yend=value),lwd=2)+
+            geom_segment( aes(x=Attribute, xend=Attribute, y=0, yend=Score),lwd=2)+
             theme(legend.position = "none")+
             xlab("Attributes")+
             ylab("Constraint score")
@@ -280,7 +312,7 @@ shinyServer(function(input, output,session) {
     output$LolliPlot.principles <- renderPlot({
       if(length(unlist(strsplit(input$Spp_lab,split=",")))==0|input$fishery_choice=="")
       {
-        DL_parcoor<-archtypes.scores()[1,-c(1,2)]
+        DL_parcoor<-archtypes.scores()[4,-c(1,2)]
       }
       if(length(unlist(strsplit(input$Spp_lab,split=",")))>0&input$fishery_choice!="")
       {
@@ -305,41 +337,43 @@ shinyServer(function(input, output,session) {
         }
         else(DL_parcoor<-archtypes.scores()[1,-c(1,2)])
       }
-      DR_plot_lollipop<-melt(DL_parcoor)
-      DR_plot_lollipop$Type<-"A"
-      DR_plot_lollipop$Type[grep("Data",DR_plot_lollipop$variable)]<-"Data"
-      DR_plot_lollipop$Type[grep("Res",DR_plot_lollipop$variable)]<-"Resource"
+      DR_labels<-c("Data: #Types","Data: Precision","Data: Bias","Data: Spp ID","Data: Temporal","Data: Coverage", "Res: Time","Res: Funding","Res: Capacity","Res: Analysts:Stocks")
+      DR_plot_lollipop<-data.frame(Attribute=DR_labels,Score=as.numeric(DL_parcoor),Type="A")
+      DR_plot_lollipop$Attribute<-factor(DR_plot_lollipop$Attribute,levels=rev(unique(DR_plot_lollipop$Attribute)))
+      DR_plot_lollipop$Type[grep("Data",DR_plot_lollipop$Attribute)]<-"Data"
+      DR_plot_lollipop$Type[grep("Res",DR_plot_lollipop$Attribute)]<-"Resource"
       Principle.names<-c("Data training", "Improve data","Local input","Analytical training","Simple methods","Complex models","Static MMs","Dynamic CRs","Improve Mod. Specs.","Improve governance")
       Principle.scores<-rep(NA,length(Principle.names))
       #Train on data
-      if(DR_plot_lollipop$value[1]==3){Principle.scores[1]<-3}
-      if(DR_plot_lollipop$value[1]<3){Principle.scores[1]<-mean(DR_plot_lollipop$value[c(1:6,9)])}
+      if(DR_plot_lollipop$Score[1]==3){Principle.scores[1]<-3}
+      if(DR_plot_lollipop$Score[1]<3){Principle.scores[1]<-mean(DR_plot_lollipop$Score[c(1:6,9)])}
       #Improve data
-      Principle.scores[2]<-mean(DR_plot_lollipop$value[c(1:6,10)])
+      Principle.scores[2]<-mean(DR_plot_lollipop$Score[c(1:6,10)])
       #Improve data
-      if(DR_plot_lollipop$value[1]==3){Principle.scores[3]<-3}
-      if(DR_plot_lollipop$value[1]<3){Principle.scores[3]<-mean(mean(DR_plot_lollipop$value[1:6]),mean(DR_plot_lollipop$value[7:10]))}
+      if(DR_plot_lollipop$Score[1]==3){Principle.scores[3]<-3}
+      if(DR_plot_lollipop$Score[1]<3){Principle.scores[3]<-mean(mean(DR_plot_lollipop$Score[1:6]),mean(DR_plot_lollipop$Score[7:10]))}
       #Train on assessments
-      Principle.scores[4]<-mean(DR_plot_lollipop$value[9],mean(DR_plot_lollipop$value[1:6]),mean(DR_plot_lollipop$value[c(7,8,10)]))
+      Principle.scores[4]<-mean(DR_plot_lollipop$Score[9],mean(DR_plot_lollipop$Score[1:6]),mean(DR_plot_lollipop$Score[c(7,8,10)]))
       #Do DL assessments
-      if(mean(DR_plot_lollipop$value[c(1,7:10)])==3){Principle.scores[5]<-0}
-      if(mean(DR_plot_lollipop$value[c(1,7:10)])<3){Principle.scores[5]<-mean(DR_plot_lollipop$value[c(1,7:10)])}
+      if(mean(DR_plot_lollipop$Score[c(1,7:10)])==3){Principle.scores[5]<-0}
+      if(mean(DR_plot_lollipop$Score[c(1,7:10)])<3){Principle.scores[5]<-mean(DR_plot_lollipop$Score[c(1,7:10)])}
       #Do more complex methods
-      if(DR_plot_lollipop$value[1]==3){Principle.scores[6]<-0}
-      if(DR_plot_lollipop$value[1]<3){Principle.scores[6]<-mean(3-mean(DR_plot_lollipop$value[1:6]),3-mean(DR_plot_lollipop$value[7:10]))}
+      if(DR_plot_lollipop$Score[1]==3){Principle.scores[6]<-0}
+      if(DR_plot_lollipop$Score[1]<3){Principle.scores[6]<-mean(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10]))}
       #Static MMs
-      Principle.scores[7]<-max(mean(DR_plot_lollipop$value[c(1:6)]),mean(DR_plot_lollipop$value[c(7:10)]))
+      Principle.scores[7]<-max(mean(DR_plot_lollipop$Score[c(1:6)]),mean(DR_plot_lollipop$Score[c(7:10)]))
       #Dynamics MMs
-      Principle.scores[8]<-mean(3-DR_plot_lollipop$value[1],3-mean(DR_plot_lollipop$value[c(5,7:10)]))
+      Principle.scores[8]<-mean(3-DR_plot_lollipop$Score[1],3-mean(DR_plot_lollipop$Score[c(5,7:10)]))
       #Improve Model specifications
-      if(DR_plot_lollipop$value[1]==3|mean(DR_plot_lollipop$value[7:10]==3)){Principle.scores[9]<-0}
-      else {Principle.scores[9]<-mean(3-mean(DR_plot_lollipop$value[1:6]),3-mean(DR_plot_lollipop$value[7:10]))}
+      if(DR_plot_lollipop$Score[1]==3|mean(DR_plot_lollipop$Score[7:10]==3)){Principle.scores[9]<-0}
+      else {Principle.scores[9]<-mean(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10]))}
       #Improve governance
-      if(mean(DR_plot_lollipop$value[7:9])>=2.5){Principle.scores[10]<-3}
-      if(mean(DR_plot_lollipop$value[7:9])<2.5){Principle.scores[10]<-mean(DR_plot_lollipop$value[c(1,4,7:9)])}
+      if(mean(DR_plot_lollipop$Score[7:9])>=2.5){Principle.scores[10]<-3}
+      if(mean(DR_plot_lollipop$Score[7:9])<2.5){Principle.scores[10]<-mean(DR_plot_lollipop$Score[c(1,4,7:9)])}
       
             
       Guidance_plot_lollipop<-data.frame(Names=Principle.names,Scores=Principle.scores,Type=1)
+      Guidance_plot_lollipop$Names<-factor(Guidance_plot_lollipop$Names,levels=rev(unique(Guidance_plot_lollipop$Names)))
       Lolliggplot.principles<-ggplot(Guidance_plot_lollipop, aes(x=Names, y=Scores,color=Type)) +
         geom_point(size=6) + 
         scale_y_continuous(limits=c(0,3))+
