@@ -337,6 +337,8 @@ shinyServer(function(input, output,session) {
         }
         else(DL_parcoor<-archtypes.scores()[1,-c(1,2)])
       }
+      
+      #Guidance scoring
       DR_labels<-c("Data: #Types","Data: Precision","Data: Bias","Data: Spp ID","Data: Temporal","Data: Coverage", "Res: Time","Res: Funding","Res: Capacity","Res: Analysts:Stocks")
       DR_plot_lollipop<-data.frame(Attribute=DR_labels,Score=as.numeric(DL_parcoor),Type="A")
       DR_plot_lollipop$Attribute<-factor(DR_plot_lollipop$Attribute,levels=rev(unique(DR_plot_lollipop$Attribute)))
@@ -370,7 +372,7 @@ shinyServer(function(input, output,session) {
       #Improve governance
       if(mean(DR_plot_lollipop$Score[7:9])>=2.5){Principle.scores[10]<-3}
       if(mean(DR_plot_lollipop$Score[7:9])<2.5){Principle.scores[10]<-mean(DR_plot_lollipop$Score[c(1,4,7:9)])}
-      
+      #####
             
       Guidance_plot_lollipop<-data.frame(Names=Principle.names,Scores=Principle.scores,Type=1)
       Guidance_plot_lollipop$Names<-factor(Guidance_plot_lollipop$Names,levels=rev(unique(Guidance_plot_lollipop$Names)))
