@@ -267,7 +267,13 @@ shinyServer(function(input, output,session) {
                 png(file, type='cairo',width=800,height=720)
                 print(lolliggplot)
                 dev.off()},contentType = 'image/png') 
-    })
+        
+        output$downloadAttScores <- downloadHandler(
+          filename = function() {paste0("Attribute_Scores.csv") },
+          content = function(file) {write.csv(DL_parcoor_scores(), file=file)}
+        )
+        
+            })
     
 
     output$LolliPlot.principles <- renderPlot({
@@ -310,7 +316,13 @@ shinyServer(function(input, output,session) {
         content = function(file) {
           png(file, type='cairo',width=800,height=720)
           print(Lolliggplot.principles)
-          dev.off()},contentType = 'image/png') 
+          dev.off()},contentType = 'image/png')
+      
+      output$downloadGuideScores <- downloadHandler(
+        filename = function() {paste0("Guidance_Scores.csv") },
+        content = function(file) {write.csv(Guidance_plot_lollipop, file=file)}
+      )
+      
     })
     
          ### Run quadplot ####
