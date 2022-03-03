@@ -55,7 +55,7 @@ shinyServer(function(input, output,session) {
                                 #                              c(runif(dnum,2,3),runif(rnum,0,1)),
                                 #                              c(runif(dnum,2,3),runif(rnum,0,1))),
                                 4,dnum+rnum,byrow = TRUE))
-      scores.fish<-data.frame(matrix(rep(0,(dnum+rnum)*length(fishery.labs)),
+      scores.fish<-data.frame(matrix(rep(3,(dnum+rnum)*length(fishery.labs)),
                                        length(fishery.labs),dnum+rnum,byrow = TRUE))
       colnames(scores)<-colnames(scores.fish)<-c("Data: Type","Data: Precision","Data: Bias","Data: Species ID","Data: Temporal","Data: Coverage","Res: Time","Res: Funding","Res: Capacity","Res: analysts/stocks")
       DL_parcoor_comp<-data.frame(Scenario=c("No constraints","Resources constraints","Data constraints","Data & Resource constraints"),Shapes=21,scores)
@@ -65,6 +65,7 @@ shinyServer(function(input, output,session) {
  #       DL_parcoor_comp_temp<-data.frame(fishery.labs[i],Shapes=8,colnames(scores)[1]=0,colnames(scores)[2]=0,colnames(scores)[3]=0,colnames(scores)[4]=0,colnames(scores)[5]=0,colnames(scores)[6]=0,colnames(scores)[7]=0,colnames(scores)[8]=0,colnames(scores)[9]=0,colnames(scores)[10]=0))
   #    }
       DL_parcoor_comp<-rbind(DL_parcoor_comp,DL_parcoor_comp.fish)
+      print(DL_parcoor_comp)
       return(DL_parcoor_comp)
     }
     ###############
@@ -259,7 +260,7 @@ shinyServer(function(input, output,session) {
             geom_segment( aes(x=variable, xend=variable, y=0, yend=value),lwd=2)+
             theme(legend.position = "none")+
             xlab("Attributes")+
-            ylab("Score")
+            ylab("Constraint score")
         print(lolliggplot)
         output$downloadlollipopplots <- downloadHandler(
             filename = function() { paste0('Lollipop',timestamp, '.png')},
@@ -289,7 +290,17 @@ shinyServer(function(input, output,session) {
         }
         if(any(DL_parcoor_scores()$Scenario==input$fishery_choice))
         {
-          DL_parcoor<-data.frame(matrix(data=c(input$D_type,input$D_prez,input$D_bias,input$D_spp,input$D_spatial,input$D_temp,input$R_time,input$R_funds,input$R_cap,input$R_an2stocks),nrow=1))
+          DL_parcoor<-data.frame(matrix(data=c(input$D_type,
+                                               input$D_prez,
+                                               input$D_bias,
+                                               input$D_spp,
+                                               input$D_spatial,
+                                               input$D_temp,
+                                               input$R_time,
+                                               input$R_funds,
+                                               input$R_cap,
+                                               input$R_an2stocks),
+                                               nrow=1))
           colnames(DL_parcoor)<-colnames(DL_parcoor_scores()[-c(1,2)])
         }
         else(DL_parcoor<-archtypes.scores()[1,-c(1,2)])
@@ -298,8 +309,36 @@ shinyServer(function(input, output,session) {
       DR_plot_lollipop$Type<-"A"
       DR_plot_lollipop$Type[grep("Data",DR_plot_lollipop$variable)]<-"Data"
       DR_plot_lollipop$Type[grep("Res",DR_plot_lollipop$variable)]<-"Resource"
-      Principle.names<-c("Management objs","Data training", "Improve data","Local input","Analytical training","Simple methods","Complex models","Static MMs","Dynamic CRs","Improve CIs","Improve governance")
-      Principle.scores<-rep(0,length(Principle.names))
+      Principle.names<-c("Data training", "Improve data","Local input","Analytical training","Simple methods","Complex models","Static MMs","Dynamic CRs","Improve Mod. Specs.","Improve governance")
+      Principle.scores<-rep(NA,length(Principle.names))
+      #Train on data
+      if(DR_plot_lollipop$value[1]==3){Principle.scores[1]<-3}
+      if(DR_plot_lollipop$value[1]<3){Principle.scores[1]<-mean(DR_plot_lollipop$value[c(1:6,9)])}
+      #Improve data
+      Principle.scores[2]<-mean(DR_plot_lollipop$value[c(1:6,10)])
+      #Improve data
+      if(DR_plot_lollipop$value[1]==3){Principle.scores[3]<-3}
+      if(DR_plot_lollipop$value[1]<3){Principle.scores[3]<-mean(mean(DR_plot_lollipop$value[1:6]),mean(DR_plot_lollipop$value[7:10]))}
+      #Train on assessments
+      Principle.scores[4]<-mean(DR_plot_lollipop$value[9],mean(DR_plot_lollipop$value[1:6]),mean(DR_plot_lollipop$value[c(7,8,10)]))
+      #Do DL assessments
+      if(mean(DR_plot_lollipop$value[c(1,7:10)])==3){Principle.scores[5]<-0}
+      if(mean(DR_plot_lollipop$value[c(1,7:10)])<3){Principle.scores[5]<-mean(DR_plot_lollipop$value[c(1,7:10)])}
+      #Do more complex methods
+      if(DR_plot_lollipop$value[1]==3){Principle.scores[6]<-0}
+      if(DR_plot_lollipop$value[1]<3){Principle.scores[6]<-mean(3-mean(DR_plot_lollipop$value[1:6]),3-mean(DR_plot_lollipop$value[7:10]))}
+      #Static MMs
+      Principle.scores[7]<-max(mean(DR_plot_lollipop$value[c(1:6)]),mean(DR_plot_lollipop$value[c(7:10)]))
+      #Dynamics MMs
+      Principle.scores[8]<-mean(3-DR_plot_lollipop$value[1],3-mean(DR_plot_lollipop$value[c(5,7:10)]))
+      #Improve Model specifications
+      if(DR_plot_lollipop$value[1]==3|mean(DR_plot_lollipop$value[7:10]==3)){Principle.scores[9]<-0}
+      else {Principle.scores[9]<-mean(3-mean(DR_plot_lollipop$value[1:6]),3-mean(DR_plot_lollipop$value[7:10]))}
+      #Improve governance
+      if(mean(DR_plot_lollipop$value[7:9])>=2.5){Principle.scores[10]<-3}
+      if(mean(DR_plot_lollipop$value[7:9])<2.5){Principle.scores[10]<-mean(DR_plot_lollipop$value[c(1,4,7:9)])}
+      
+            
       Guidance_plot_lollipop<-data.frame(Names=Principle.names,Scores=Principle.scores,Type=1)
       Lolliggplot.principles<-ggplot(Guidance_plot_lollipop, aes(x=Names, y=Scores,color=Type)) +
         geom_point(size=6) + 
@@ -309,7 +348,7 @@ shinyServer(function(input, output,session) {
         geom_segment( aes(x=Names, xend=Names, y=0, yend=Scores),lwd=2)+
         theme(legend.position = "none")+
         xlab("Guidance options")+
-        ylab("Score")
+        ylab("Recommendation score")
       print(Lolliggplot.principles)
       output$downloadlollipop.principles <- downloadHandler(
         filename = function() { paste0('Lolliggplot.principles',timestamp, '.png')},
