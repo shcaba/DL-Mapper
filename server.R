@@ -346,34 +346,64 @@ shinyServer(function(input, output,session) {
       DR_plot_lollipop$Type[grep("Res",DR_plot_lollipop$Attribute)]<-"Resource"
       Principle.names<-c("Data training", "Improve data","Local input","Analytical training","Simple methods","Complex models","Static MMs","Dynamic CRs","Improve Mod. Specs.","Improve governance")
       Principle.scores<-rep(NA,length(Principle.names))
+      
+      ###
+      # #Train on data
+      # if(DR_plot_lollipop$Score[1]==3){Principle.scores[1]<-3}
+      # if(DR_plot_lollipop$Score[1]<3){Principle.scores[1]<-mean(DR_plot_lollipop$Score[c(1:6,9)])}
+      # #Improve data
+      # Principle.scores[2]<-mean(DR_plot_lollipop$Score[c(1:6,10)])
+      # #Local Knowledge
+      # if(DR_plot_lollipop$Score[1]==3){Principle.scores[3]<-3}
+      # if(DR_plot_lollipop$Score[1]<3){Principle.scores[3]<-mean(mean(DR_plot_lollipop$Score[1:6]),mean(DR_plot_lollipop$Score[7:10]))}
+      # #Train on assessments
+      # Principle.scores[4]<-mean(DR_plot_lollipop$Score[9],mean(DR_plot_lollipop$Score[1:6]),mean(DR_plot_lollipop$Score[c(7,8,10)]))
+      # #Do DL assessments
+      # if(mean(DR_plot_lollipop$Score[c(1,7:10)])==3){Principle.scores[5]<-0}
+      # if(mean(DR_plot_lollipop$Score[c(1,7:10)])<3){Principle.scores[5]<-mean(DR_plot_lollipop$Score[c(1,7:10)])}
+      # #Do more complex methods
+      # if(DR_plot_lollipop$Score[1]==3){Principle.scores[6]<-0}
+      # if(DR_plot_lollipop$Score[1]<3){Principle.scores[6]<-mean(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10]))}
+      # #Static MMs
+      # Principle.scores[7]<-max(mean(DR_plot_lollipop$Score[c(1:6)]),mean(DR_plot_lollipop$Score[c(7:10)]))
+      # #Dynamics MMs
+      # Principle.scores[8]<-mean(3-DR_plot_lollipop$Score[1],3-mean(DR_plot_lollipop$Score[c(5,7:10)]))
+      # #Improve Model specifications
+      # if(DR_plot_lollipop$Score[1]==3|mean(DR_plot_lollipop$Score[7:10]==3)){Principle.scores[9]<-0}
+      # else {Principle.scores[9]<-mean(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10]))}
+      # #Improve governance
+      # if(mean(DR_plot_lollipop$Score[7:9])>=2.5){Principle.scores[10]<-3}
+      # if(mean(DR_plot_lollipop$Score[7:9])<2.5){Principle.scores[10]<-mean(DR_plot_lollipop$Score[c(1,4,7:9)])}
+      #####
+
       #Train on data
-      if(DR_plot_lollipop$Score[1]==3){Principle.scores[1]<-3}
-      if(DR_plot_lollipop$Score[1]<3){Principle.scores[1]<-mean(DR_plot_lollipop$Score[c(1:6,9)])}
+      if(DR_plot_lollipop$Score[1]==input$traindata){Principle.scores[1]<-3}
+      if(DR_plot_lollipop$Score[1]<input$traindata){Principle.scores[1]<-mean(DR_plot_lollipop$Score[c(1:6,9)])}
       #Improve data
       Principle.scores[2]<-mean(DR_plot_lollipop$Score[c(1:6,10)])
-      #Improve data
-      if(DR_plot_lollipop$Score[1]==3){Principle.scores[3]<-3}
-      if(DR_plot_lollipop$Score[1]<3){Principle.scores[3]<-mean(mean(DR_plot_lollipop$Score[1:6]),mean(DR_plot_lollipop$Score[7:10]))}
+      #Local Knowledge
+      if(DR_plot_lollipop$Score[1]==input$locknow){Principle.scores[3]<-3}
+      if(DR_plot_lollipop$Score[1]<input$locknow){Principle.scores[3]<-mean(mean(DR_plot_lollipop$Score[1:6]),mean(DR_plot_lollipop$Score[7:10]))}
       #Train on assessments
       Principle.scores[4]<-mean(DR_plot_lollipop$Score[9],mean(DR_plot_lollipop$Score[1:6]),mean(DR_plot_lollipop$Score[c(7,8,10)]))
       #Do DL assessments
-      if(mean(DR_plot_lollipop$Score[c(1,7:10)])==3){Principle.scores[5]<-0}
-      if(mean(DR_plot_lollipop$Score[c(1,7:10)])<3){Principle.scores[5]<-mean(DR_plot_lollipop$Score[c(1,7:10)])}
+      if(mean(DR_plot_lollipop$Score[c(1,7:10)])==input$DoDL){Principle.scores[5]<-0}
+      if(mean(DR_plot_lollipop$Score[c(1,7:10)])<input$DoDL){Principle.scores[5]<-mean(DR_plot_lollipop$Score[c(1,7:10)])}
       #Do more complex methods
-      if(DR_plot_lollipop$Score[1]==3){Principle.scores[6]<-0}
-      if(DR_plot_lollipop$Score[1]<3){Principle.scores[6]<-mean(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10]))}
+      if(DR_plot_lollipop$Score[1]==input$Docomplex){Principle.scores[6]<-0}
+      if(DR_plot_lollipop$Score[1]<input$Docomplex){Principle.scores[6]<-mean(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10]))}
       #Static MMs
       Principle.scores[7]<-max(mean(DR_plot_lollipop$Score[c(1:6)]),mean(DR_plot_lollipop$Score[c(7:10)]))
       #Dynamics MMs
-      Principle.scores[8]<-mean(3-DR_plot_lollipop$Score[1],3-mean(DR_plot_lollipop$Score[c(5,7:10)]))
+      Principle.scores[8]<-mean(input$DMM-DR_plot_lollipop$Score[1],input$DMM-mean(DR_plot_lollipop$Score[c(5,7:10)]))
       #Improve Model specifications
-      if(DR_plot_lollipop$Score[1]==3|mean(DR_plot_lollipop$Score[7:10]==3)){Principle.scores[9]<-0}
+      if(DR_plot_lollipop$Score[1]==input$Modspecs|mean(DR_plot_lollipop$Score[7:10]==input$Modspecs)){Principle.scores[9]<-0}
       else {Principle.scores[9]<-mean(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10]))}
       #Improve governance
-      if(mean(DR_plot_lollipop$Score[7:9])>=2.5){Principle.scores[10]<-3}
-      if(mean(DR_plot_lollipop$Score[7:9])<2.5){Principle.scores[10]<-mean(DR_plot_lollipop$Score[c(1,4,7:9)])}
+      if(mean(DR_plot_lollipop$Score[7:9])>=input$Gov){Principle.scores[10]<-3}
+      if(mean(DR_plot_lollipop$Score[7:9])<input$Gov){Principle.scores[10]<-mean(DR_plot_lollipop$Score[c(1,4,7:9)])}
       #####
-            
+      
       Guidance_plot_lollipop<-data.frame(Names=Principle.names,Scores=Principle.scores,Type=1)
       Guidance_plot_lollipop$Names<-factor(Guidance_plot_lollipop$Names,levels=rev(unique(Guidance_plot_lollipop$Names)))
       Lolliggplot.principles<-ggplot(Guidance_plot_lollipop, aes(x=Names, y=Scores,color=Type)) +

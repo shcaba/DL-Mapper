@@ -125,7 +125,21 @@ shinyUI(fluidPage(
             bsTooltip("R_cap", "Technical capacity constraints to conduct stock assessments of varying complexity.",
                       "right", options = list(container = "body")),
             bsTooltip("R_an2stocks", "Ratio of the number of stock assessment analysts to the number of stock needing to be assessed. A small ratio will compromise the number and complexity of stock assessments in the system.",
-                      "right", options = list(container = "body"))
+                      "right", options = list(container = "body")),
+
+
+br(),
+br(),
+br(),
+fluidRow(column(width=3,numericInput("traindata","Train on data",value=3,min=0,max=3,ste=0.001)),
+         column(width=3,numericInput("locknow","Local Knowledge",value=3,min=0,max=3,ste=0.001)),
+         column(width=3,numericInput("DoDL","Do DLMs",value=3,min=0,max=3,ste=0.001)),
+         column(width=3,numericInput("Docomplex","Do complex",value=3,min=0,max=3,ste=0.001))),
+fluidRow(column(width=3,numericInput("DMM","Dynamic MM",value=3,min=0,max=3,ste=0.001)),
+         column(width=3,numericInput("Modspecs","Modspecs",value=3,min=0,max=3,ste=0.001)),
+         column(width=3,numericInput("Gov","Governamce",value=3,min=0,max=2.5,ste=0.001)))
+
+         
         ),
 
         # Show a plot of the generated distribution
