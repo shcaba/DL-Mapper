@@ -87,7 +87,7 @@ shinyServer(function(input, output,session) {
                         "Types",
                         min = 0,
                         max = 3,
-                        step=0.01,
+                        step=0.1,
                         #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,3])
                         value = dtype.in)
     }
@@ -100,7 +100,7 @@ shinyServer(function(input, output,session) {
                         "Imprecision",
                         min = 0,
                         max = 3,
-                        step=0.01,
+                        step=0.1,
                         #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,4])
                         value = dprez.in)
     }
@@ -113,7 +113,7 @@ shinyServer(function(input, output,session) {
                         "Bias",
                         min = 0,
                         max = 3,
-                        step=0.01,
+                        step=0.1,
 #                        value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,5])
                         value = dbias.in)
     }
@@ -126,7 +126,7 @@ shinyServer(function(input, output,session) {
                         "Species-specific",
                         min = 0,
                         max = 3,
-                        step=0.01,
+                        step=0.1,
                         value = dspp.in)
       #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,6])
       }
@@ -139,7 +139,7 @@ shinyServer(function(input, output,session) {
                         "Spatial limitations",
                         min = 0,
                         max = 3,
-                        step=0.01,
+                        step=0.1,
                         value = dspat.in)
       #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,7])
       }
@@ -152,7 +152,7 @@ shinyServer(function(input, output,session) {
                         "Temporal limitations",
                         min = 0,
                         max = 3,
-                        step=0.01,
+                        step=0.1,
                         value = dtemp.in)
       #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,8])
       }
@@ -165,7 +165,7 @@ shinyServer(function(input, output,session) {
                         "Time",
                         min = 0,
                         max = 3,
-                        step=0.01,
+                        step=0.1,
                         value = rtime.in)
       #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,9])
       }
@@ -178,7 +178,7 @@ shinyServer(function(input, output,session) {
                         "Funding",
                         min = 0,
                         max = 3,
-                        step=0.01,
+                        step=0.1,
                         value = rfunds.in)
       #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,10])
       }
@@ -191,7 +191,7 @@ shinyServer(function(input, output,session) {
                         "Technical capacity",
                         min = 0,
                         max = 3,
-                        step=0.01,
+                        step=0.1,
                         value = rcap.in)
       #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,11])
       }
@@ -204,7 +204,7 @@ shinyServer(function(input, output,session) {
                         "Analysts:Stocks",
                         min = 0,
                         max = 3,
-                        step=0.01,
+                        step=0.1,
                         value = ranst.in)
       #value = DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,12])
       }
