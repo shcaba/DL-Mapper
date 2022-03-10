@@ -30,7 +30,7 @@ shinyServer(function(input, output,session) {
       #                              c(runif(dnum,2,3),runif(rnum,0,1)),
       #                              c(runif(dnum,2,3),runif(rnum,0,1))),
                                   4,dnum+rnum,byrow = TRUE))
-        colnames(scores)<-c("Data: Type","Data: Precision","Data: Bias","Data: Species ID","Data: Temporal","Data: Coverage","Res: Time","Res: Funding","Res: Capacity","Res: analysts/stocks")
+        colnames(scores)<-c("Data: Type","Data: Precision","Data: Bias","Data: Species ID","Data: Spatial","Data: Temporal","Res: Time","Res: Funding","Res: Capacity","Res: analysts/stocks")
         DL_parcoor<-data.frame(Scenario=c("No constraints","Resources constraints","Data constraints","Data & Resource constraints"),Shapes=21,scores)
         return(DL_parcoor)
     }
@@ -57,7 +57,7 @@ shinyServer(function(input, output,session) {
                                 4,dnum+rnum,byrow = TRUE))
       scores.fish<-data.frame(matrix(rep(3,(dnum+rnum)*length(fishery.labs)),
                                        length(fishery.labs),dnum+rnum,byrow = TRUE))
-      colnames(scores)<-colnames(scores.fish)<-c("Data: Type","Data: Precision","Data: Bias","Data: Species ID","Data: Temporal","Data: Coverage","Res: Time","Res: Funding","Res: Capacity","Res: analysts/stocks")
+      colnames(scores)<-colnames(scores.fish)<-c("Data: Type","Data: Precision","Data: Bias","Data: Species ID","Data: Spatial","Data: Temporal","Res: Time","Res: Funding","Res: Capacity","Res: analysts/stocks")
       DL_parcoor_comp<-data.frame(Scenario=c("No constraints","Resources constraints","Data constraints","Data & Resource constraints"),Shapes=21,scores)
       DL_parcoor_comp.fish<-data.frame(Scenario=fishery.labs,Shapes=8,scores.fish)
 
@@ -277,7 +277,7 @@ shinyServer(function(input, output,session) {
         else(DL_parcoor<-archtypes.scores()[1,-c(1,2)])
       }
 #        DR_plot_lollipop<-melt(DL_parcoor)
-        DR_labels<-c("Data: #Types","Data: Precision","Data: Bias","Data: Spp ID","Data: Temporal","Data: Coverage", "Res: Time","Res: Funding","Res: Capacity","Res: Analysts:Stocks")
+        DR_labels<-c("Data: #Types","Data: Precision","Data: Bias","Data: Spp ID","Data: Spatial","Data: Temporal", "Res: Time","Res: Funding","Res: Capacity","Res: Analysts:Stocks")
         DR_plot_lollipop<-data.frame(Attribute=DR_labels,Score=as.numeric(DL_parcoor),Type="A")
         DR_plot_lollipop$Attribute<-factor(DR_plot_lollipop$Attribute,levels=rev(unique(DR_plot_lollipop$Attribute)))
 #        DR_plot_lollipop$Type<-"A"
@@ -339,7 +339,7 @@ shinyServer(function(input, output,session) {
       }
       
       #Guidance scoring
-      DR_labels<-c("Data: #Types","Data: Precision","Data: Bias","Data: Spp ID","Data: Temporal","Data: Coverage", "Res: Time","Res: Funding","Res: Capacity","Res: Analysts:Stocks")
+      DR_labels<-c("Data: #Types","Data: Precision","Data: Bias","Data: Spp ID","Data: Spatial","Data: Temporal", "Res: Time","Res: Funding","Res: Capacity","Res: Analysts:Stocks")
       DR_plot_lollipop<-data.frame(Attribute=DR_labels,Score=as.numeric(DL_parcoor),Type="A")
       DR_plot_lollipop$Attribute<-factor(DR_plot_lollipop$Attribute,levels=rev(unique(DR_plot_lollipop$Attribute)))
       DR_plot_lollipop$Type[grep("Data",DR_plot_lollipop$Attribute)]<-"Data"
