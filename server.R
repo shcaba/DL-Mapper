@@ -395,9 +395,9 @@ shinyServer(function(input, output,session) {
       #Static MMs
       Principle.scores[7]<-max(mean(DR_plot_lollipop$Score[c(1:6)]),mean(DR_plot_lollipop$Score[c(7:10)]))
       #Dynamics MMs
-      Principle.scores[8]<-mean(c(input$DMM-DR_plot_lollipop$Score[1],input$DMM-mean(DR_plot_lollipop$Score[c(5,7:10)])))
+      Principle.scores[8]<-mean(c(3-DR_plot_lollipop$Score[1],3-mean(DR_plot_lollipop$Score[c(5,7:10)])))
       #Improve Model specifications
-      if(mean(DR_plot_lollipop$Score[1:6])>=input$Modspecs|mean(DR_plot_lollipop$Score[7:10]>=input$Modspecs)){Principle.scores[9]<-0}
+      if(mean(DR_plot_lollipop$Score[1:6])>=input$Modspecs|mean(DR_plot_lollipop$Score[7:10])>=input$Modspecs){Principle.scores[9]<-0}
       else {Principle.scores[9]<-mean(c(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10])))}
       #Improve governance
       if(mean(DR_plot_lollipop$Score[7:9])>=input$Gov){Principle.scores[10]<-3}
