@@ -377,27 +377,27 @@ shinyServer(function(input, output,session) {
       #####
 
       #Train on data
-      if(DR_plot_lollipop$Score[1]>=input$traindata){Principle.scores[1]<-3}
-      if(DR_plot_lollipop$Score[1]<input$traindata){Principle.scores[1]<-mean(DR_plot_lollipop$Score[c(1:6,9)])}
+      if(mean(DR_plot_lollipop$Score[1:6])>=input$traindata){Principle.scores[1]<-3}
+      if(mean(DR_plot_lollipop$Score[1:6])<input$traindata){Principle.scores[1]<-mean(DR_plot_lollipop$Score[c(1:6,9)])}
       #Improve data
       Principle.scores[2]<-mean(DR_plot_lollipop$Score[c(1:6,10)])
       #Local Knowledge
-      if(DR_plot_lollipop$Score[1]>=input$locknow){Principle.scores[3]<-3}
-      if(DR_plot_lollipop$Score[1]<input$locknow){Principle.scores[3]<-mean(c(mean(DR_plot_lollipop$Score[1:6]),mean(DR_plot_lollipop$Score[7:10])))}
+      if(mean(DR_plot_lollipop$Score[1:6])>=input$locknow){Principle.scores[3]<-3}
+      if(mean(DR_plot_lollipop$Score[1:6])<input$locknow){Principle.scores[3]<-mean(c(mean(DR_plot_lollipop$Score[1:6]),mean(DR_plot_lollipop$Score[7:10])))}
       #Train on assessments
       Principle.scores[4]<-mean(c(DR_plot_lollipop$Score[9],mean(DR_plot_lollipop$Score[1:6]),mean(DR_plot_lollipop$Score[c(7,8,10)])))
       #Do DL assessments
       if(mean(DR_plot_lollipop$Score[c(1,7:10)])>=input$DoDL){Principle.scores[5]<-0}
       if(mean(DR_plot_lollipop$Score[c(1,7:10)])<input$DoDL){Principle.scores[5]<-mean(DR_plot_lollipop$Score[c(1,7:10)])}
       #Do more complex methods
-      if(DR_plot_lollipop$Score[1]>=input$Docomplex){Principle.scores[6]<-0}
-      if(DR_plot_lollipop$Score[1]<input$Docomplex){Principle.scores[6]<-mean(c(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10])))}
+      if(mean(DR_plot_lollipop$Score[1:6])>=input$Docomplex|mean(DR_plot_lollipop$Score[7:10])>=input$Docomplex){Principle.scores[6]<-0}
+      else {Principle.scores[6]<-mean(c(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10])))}
       #Static MMs
       Principle.scores[7]<-max(mean(DR_plot_lollipop$Score[c(1:6)]),mean(DR_plot_lollipop$Score[c(7:10)]))
       #Dynamics MMs
       Principle.scores[8]<-mean(c(input$DMM-DR_plot_lollipop$Score[1],input$DMM-mean(DR_plot_lollipop$Score[c(5,7:10)])))
       #Improve Model specifications
-      if(DR_plot_lollipop$Score[1]>=input$Modspecs|mean(DR_plot_lollipop$Score[7:10]==input$Modspecs)){Principle.scores[9]<-0}
+      if(mean(DR_plot_lollipop$Score[1:6])>=input$Modspecs|mean(DR_plot_lollipop$Score[7:10]>=input$Modspecs)){Principle.scores[9]<-0}
       else {Principle.scores[9]<-mean(c(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10])))}
       #Improve governance
       if(mean(DR_plot_lollipop$Score[7:9])>=input$Gov){Principle.scores[10]<-3}

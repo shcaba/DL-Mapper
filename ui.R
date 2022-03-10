@@ -50,7 +50,7 @@ shinyUI(fluidPage(
                         max = 3,
                         step=0.1,
                         value = 3))),
-            bsTooltip("D_type", "Different types of data available, such as catch, indices of abundnace and/or biological data. The more data, the less constraints on data type.",
+            bsTooltip("D_type", "Different types of data available, such as catch, indices of abundnace and/or biological data. The more data, the less constraints on data type. 3 = no available data.",
                       "right", options = list(container = "body")),
             bsTooltip("D_prez", "Level of imprecision based on low sample size, high measurement error or other causes of high varaiance or low signal power.",
                       "right", options = list(container = "body")),
