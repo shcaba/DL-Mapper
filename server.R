@@ -6,6 +6,7 @@ library(hrbrthemes)
 library(viridis)
 library(plotly)
 library(reshape2)
+library(dplyr)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output,session) {
@@ -344,38 +345,11 @@ shinyServer(function(input, output,session) {
       DR_plot_lollipop$Attribute<-factor(DR_plot_lollipop$Attribute,levels=rev(unique(DR_plot_lollipop$Attribute)))
       DR_plot_lollipop$Type[grep("Data",DR_plot_lollipop$Attribute)]<-"Data"
       DR_plot_lollipop$Type[grep("Res",DR_plot_lollipop$Attribute)]<-"Resource"
-      Principle.names<-c("Data training", "Improve data","Local input","Analytical training","Simple methods","Complex models","Static MMs","Dynamic CRs","Improve Mod. Specs.","Improve governance")
+      #Principle.names<-c("Data training", "Improve data","Local input","Analytical training","Simple methods","Complex models","Static MMs","Dynamic CRs","Improve Mod. Specs.","Improve governance")
+      Principle.names<-c("Data training", "Improve data","Local input","Analytical training","Simple methods","Complex models","Improve Mod. Specs.","Static MMs","Dynamic CRs","Improve governance")
       Principle.scores<-rep(NA,length(Principle.names))
       
-      ###
-      # #Train on data
-      # if(DR_plot_lollipop$Score[1]==3){Principle.scores[1]<-3}
-      # if(DR_plot_lollipop$Score[1]<3){Principle.scores[1]<-mean(DR_plot_lollipop$Score[c(1:6,9)])}
-      # #Improve data
-      # Principle.scores[2]<-mean(DR_plot_lollipop$Score[c(1:6,10)])
-      # #Local Knowledge
-      # if(DR_plot_lollipop$Score[1]==3){Principle.scores[3]<-3}
-      # if(DR_plot_lollipop$Score[1]<3){Principle.scores[3]<-mean(mean(DR_plot_lollipop$Score[1:6]),mean(DR_plot_lollipop$Score[7:10]))}
-      # #Train on assessments
-      # Principle.scores[4]<-mean(DR_plot_lollipop$Score[9],mean(DR_plot_lollipop$Score[1:6]),mean(DR_plot_lollipop$Score[c(7,8,10)]))
-      # #Do DL assessments
-      # if(mean(DR_plot_lollipop$Score[c(1,7:10)])==3){Principle.scores[5]<-0}
-      # if(mean(DR_plot_lollipop$Score[c(1,7:10)])<3){Principle.scores[5]<-mean(DR_plot_lollipop$Score[c(1,7:10)])}
-      # #Do more complex methods
-      # if(DR_plot_lollipop$Score[1]==3){Principle.scores[6]<-0}
-      # if(DR_plot_lollipop$Score[1]<3){Principle.scores[6]<-mean(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10]))}
-      # #Static MMs
-      # Principle.scores[7]<-max(mean(DR_plot_lollipop$Score[c(1:6)]),mean(DR_plot_lollipop$Score[c(7:10)]))
-      # #Dynamics MMs
-      # Principle.scores[8]<-mean(3-DR_plot_lollipop$Score[1],3-mean(DR_plot_lollipop$Score[c(5,7:10)]))
-      # #Improve Model specifications
-      # if(DR_plot_lollipop$Score[1]==3|mean(DR_plot_lollipop$Score[7:10]==3)){Principle.scores[9]<-0}
-      # else {Principle.scores[9]<-mean(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10]))}
-      # #Improve governance
-      # if(mean(DR_plot_lollipop$Score[7:9])>=2.5){Principle.scores[10]<-3}
-      # if(mean(DR_plot_lollipop$Score[7:9])<2.5){Principle.scores[10]<-mean(DR_plot_lollipop$Score[c(1,4,7:9)])}
       #####
-
       #Train on data
       if(mean(DR_plot_lollipop$Score[1:6])>=input$traindata){Principle.scores[1]<-3}
       if(mean(DR_plot_lollipop$Score[1:6])<input$traindata){Principle.scores[1]<-mean(DR_plot_lollipop$Score[c(1:6,9)])}
@@ -392,22 +366,23 @@ shinyServer(function(input, output,session) {
       #Do more complex methods
       if(mean(DR_plot_lollipop$Score[1:6])>=input$Docomplex|mean(DR_plot_lollipop$Score[7:10])>=input$Docomplex){Principle.scores[6]<-0}
       else {Principle.scores[6]<-mean(c(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10])))}
-      #Static MMs
-      Principle.scores[7]<-max(mean(DR_plot_lollipop$Score[c(1:6)]),mean(DR_plot_lollipop$Score[c(7:10)]))
-      #Dynamics MMs
-      Principle.scores[8]<-mean(c(3-DR_plot_lollipop$Score[1],3-mean(DR_plot_lollipop$Score[c(5,7:10)])))
       #Improve Model specifications
-      if(mean(DR_plot_lollipop$Score[1:6])>=input$Modspecs|mean(DR_plot_lollipop$Score[7:10])>=input$Modspecs){Principle.scores[9]<-0}
-      else {Principle.scores[9]<-mean(c(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10])))}
+      if(mean(DR_plot_lollipop$Score[1:6])>=input$Modspecs|mean(DR_plot_lollipop$Score[7:10])>=input$Modspecs){Principle.scores[7]<-0}
+      else {Principle.scores[7]<-mean(c(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10])))}
+      #Static MMs
+      Principle.scores[8]<-max(mean(DR_plot_lollipop$Score[c(1:6)]),mean(DR_plot_lollipop$Score[c(7:10)]))
+      #Dynamics MMs
+      Principle.scores[9]<-mean(c(3-DR_plot_lollipop$Score[1],3-mean(DR_plot_lollipop$Score[c(5,7:10)])))
       #Improve governance
       if(mean(DR_plot_lollipop$Score[7:9])>=input$Gov){Principle.scores[10]<-3}
       if(mean(DR_plot_lollipop$Score[7:9])<input$Gov){Principle.scores[10]<-mean(DR_plot_lollipop$Score[c(1,4,7:9)])}
       #####
       
-      Guidance_plot_lollipop<-data.frame(Names=Principle.names,Scores=Principle.scores,Type=1)
+      Guidance_plot_lollipop<-data.frame(Names=Principle.names,Scores=Principle.scores,Type=c(1,1,1,5,5,5,5,9,9,9))
       Guidance_plot_lollipop$Names<-factor(Guidance_plot_lollipop$Names,levels=rev(unique(Guidance_plot_lollipop$Names)))
       Lolliggplot.principles<-ggplot(Guidance_plot_lollipop, aes(x=Names, y=Scores,color=Type)) +
-        geom_point(size=6) + 
+        geom_point(size=6) +
+        scale_color_viridis()+
         scale_y_continuous(limits=c(0,3))+
         ggtitle(input$fishery_choice)+
         coord_flip() +
@@ -423,10 +398,10 @@ shinyServer(function(input, output,session) {
           print(Lolliggplot.principles)
           dev.off()},contentType = 'image/png')
       
-      output$downloadGuideScores <- downloadHandler(
-        filename = function() {paste0("Guidance_Scores.csv") },
-        content = function(file) {write.csv(Guidance_plot_lollipop, file=file)}
-      )
+      # output$downloadGuideScores <- downloadHandler(
+      #   filename = function() {paste0("Guidance_Scores.csv") },
+      #   content = function(file) {write.csv(Guidance_plot_lollipop, file=file)}
+      # )
       
     })
     
@@ -450,11 +425,13 @@ shinyServer(function(input, output,session) {
       res<-ggplotly(ggplot(DR_plot,aes(Data,Resources,fill=Scenario))+
             geom_point(size=3,shape=DR_plot$Shapes)+
             theme(legend.position = "none")+
+            scale_fill_viridis(discrete = TRUE)+
             geom_vline(xintercept=1.5,color="red",lty=2)+
             geom_hline(yintercept=1.5,color="red",lty=2))
         res
     })
 
+    #Run attributes parallel coordinate plot
     output$ParCoorPlot <- renderPlotly({
         # DL_parcoor<-archtypes.scores()
         # DL_parcoor<-rbind(DL_parcoor,DL_parcoor[1,])
@@ -529,8 +506,126 @@ shinyServer(function(input, output,session) {
                                 label = "analysts:stocks", values = as.formula(paste("~",colnames(DL_parcoor[11]))))
                                 #label = colnames(DL_parcoor)[11], values = as.formula(paste("~",colnames(DL_parcoor[11]))))
                        )
-        )
+        ) %>% layout(title="Comparison of attribute scores across example fisheries")
         
+    })
+
+    #Run attributes parallel coordinate plot
+    output$ParCoorPlotGuidance <- renderPlotly({
+      # DL_parcoor<-archtypes.scores()
+      # DL_parcoor<-rbind(DL_parcoor,DL_parcoor[1,])
+      # DL_parcoor<-DL_parcoor[,-2]
+      # DL_parcoor[nrow(DL_parcoor),]<-data.frame(input$Spp_lab,input$D_type,input$D_prez,input$D_bias,input$D_spp,input$D_spatial,input$D_temp,input$R_time,input$R_funds,input$R_cap,input$R_an2stocks)
+      if(is.null(input$fishery_compare)==TRUE)
+      {
+        DL_parcoor<-archtypes.scores()[,-2]
+        #DL_parcoor<-DL_parcoor_scores()[,-2]  
+      }
+      if(is.null(input$fishery_compare)==FALSE)
+      {
+        Scenario_comp<-DL_parcoor_scores()$Scenario%in%c(DL_parcoor_scores()$Scenario[1:4],input$fishery_compare)
+        DL_parcoor<-DL_parcoor_scores()[Scenario_comp,-2]
+      }
+      #      width = 800, height = 400,              #layout(margin=list(t=0))
+      
+      Guidance_parcoor<-DL_parcoor
+      ParCoor_labs<-c("Data training", "Improve data","Local input","Analytical training","Simple methods","Complex models","Improve Mod. Specs.","Static MMs","Dynamic CRs","Improve governance")
+      colnames(Guidance_parcoor)[2:11]<-c("Train_Data", "Improve_Data","LEK","Analytical_Training","Simple_Models","Complex_Models","Improve_ModSpecs","StaticMMs","DynamicCRs","Improve_gov")
+      Guidance_parcoor$colorsin<-1:nrow(Guidance_parcoor)
+      
+      #####
+      #Train on data
+      Guidance_parcoor[rowMeans(DL_parcoor[,2:7])>=input$traindata,2]<-3
+      Guidance_parcoor[rowMeans(DL_parcoor[,2:7])<input$traindata,2]<-rowMeans(DL_parcoor[rowMeans(DL_parcoor[,2:7])<input$traindata,c(2:7,10)])
+      #Improve data
+      Guidance_parcoor[,3]<-rowMeans(DL_parcoor[,c(2:7,11)])
+      #Local Knowledge
+      Guidance_parcoor[rowMeans(DL_parcoor[,2:7])>=input$locknow,4]<-3
+      Guidance_parcoor[rowMeans(DL_parcoor[,2:7])<input$locknow,4]<-rowMeans(cbind(rowMeans(DL_parcoor[rowMeans(DL_parcoor[,2:7])<input$locknow,2:7]),rowMeans(DL_parcoor[rowMeans(DL_parcoor[,2:7])<input$locknow,8:11])))
+      #Train on assessments
+      Guidance_parcoor[,5]<-rowMeans(cbind(DL_parcoor[,10],rowMeans(DL_parcoor[,2:7]),rowMeans(DL_parcoor[,c(8,9,11)])))
+      #Do DL assessments
+      Guidance_parcoor[rowMeans(DL_parcoor[,c(2,8:11)])>=input$DoDL,6]<-0
+      Guidance_parcoor[rowMeans(DL_parcoor[,c(2,8:11)])<input$DoDL,6]<-rowMeans(DL_parcoor[rowMeans(DL_parcoor[,c(2,8:11)])<input$DoDL,c(2,8:11)])
+      #Do more complex methods
+      Guidance_parcoor[rowMeans(DL_parcoor[2:7])>=input$Docomplex|rowMeans(DL_parcoor[8:11])>=input$Docomplex,7]<-0
+      Guidance_parcoor[!(rowMeans(DL_parcoor[2:7])>=input$Docomplex|rowMeans(DL_parcoor[8:11])>=input$Docomplex),7]<-rowMeans(cbind(3-rowMeans(DL_parcoor[!(rowMeans(DL_parcoor[2:7])>=input$Docomplex|rowMeans(DL_parcoor[8:11])>=input$Docomplex),2:7]),3-rowMeans(DL_parcoor[!(rowMeans(DL_parcoor[2:7])>=input$Docomplex|rowMeans(DL_parcoor[8:11])>=input$Docomplex),8:11])))
+      #Improve Model specifications
+      Modspecs_TF<-rowMeans(DL_parcoor[,2:7])>=input$Modspecs|rowMeans(DL_parcoor[,8:11])>=input$Modspecs
+      Guidance_parcoor[Modspecs_TF,8]<-0
+      Guidance_parcoor[!Modspecs_TF,8]<-rowMeans(cbind(3-rowMeans(DL_parcoor[!Modspecs_TF,2:7]),3-rowMeans(DL_parcoor[!Modspecs_TF,8:11])))
+      #Static MMs
+      Guidance_parcoor[,9]<-apply(X=cbind(rowMeans(DL_parcoor[,c(2:7)]),rowMeans(DL_parcoor[,c(8:11)])), MARGIN=1, FUN=max)
+      #Dynamics MMs
+      Guidance_parcoor[,10]<-rowMeans(cbind(3-DL_parcoor[,2],3-rowMeans(DL_parcoor[,c(6,8:11)])))
+      #Improve governance
+      Guidance_parcoor[rowMeans(DL_parcoor[,8:10])>=input$Gov,11]<-3
+      Guidance_parcoor[rowMeans(DL_parcoor[8:10])<input$Gov,11]<-rowMeans(DL_parcoor[rowMeans(DL_parcoor[8:10])<input$Gov,c(2,5,8:10)])
+      #####
+      output$downloadGuideScores <- downloadHandler(
+        filename = function() {paste0("Guidance_Scores.csv") },
+        content = function(file) {write.csv(Guidance_parcoor, file=file)}
+      )
+      
+      
+      p<-plot_ly(Guidance_parcoor,type = 'parcoords',name="Test",labelside="bottom",labelfont=list(size=10),labelangle=-15,
+              line = list(color = ~colorsin,
+                          colorscale = list(c(0,'red'),c(1,'green'),c(2,'blue'))),
+              dimensions = list(
+                list(range = c(0,3),
+                     #constraintrange = c(0,3),
+                     tickvals = c(0,1,2,3),
+                     label = ParCoor_labs[1], values = as.formula(paste("~",colnames(Guidance_parcoor)[2]))),
+                #                               label = colnames(DL_parcoor)[2], values = as.formula(paste("~",colnames(DL_parcoor[2])))),
+                list(range = c(0,3),
+                     #constraintrange = c(0,3),
+                     tickvals = c(0,1,2,3),
+                     label = ParCoor_labs[2], values = as.formula(paste("~",colnames(Guidance_parcoor[3])))),
+                #                                label = colnames(DL_parcoor)[3], values = as.formula(paste("~",colnames(DL_parcoor[3])))),
+                list(range = c(0,3),
+                     #constraintrange = c(0,3),
+                     tickvals = c(0,1,2,3),
+                     label = ParCoor_labs[3], values = as.formula(paste("~",colnames(Guidance_parcoor[4])))),                                
+                #                                label = colnames(DL_parcoor)[4], values = as.formula(paste("~",colnames(DL_parcoor[4])))),
+                list(range = c(0,3),
+                     #constraintrange = c(0,3),
+                     tickvals = c(0,1,2,3),
+                     label = ParCoor_labs[4], values = as.formula(paste("~",colnames(Guidance_parcoor[5])))),
+                #label = colnames(DL_parcoor)[5], values = as.formula(paste("~",colnames(DL_parcoor[5])))),
+                list(range = c(0,3),
+                     #constraintrange = c(0,3),
+                     tickvals = c(0,1,2,3),
+                     label = ParCoor_labs[5], values = as.formula(paste("~",colnames(Guidance_parcoor[6])))),
+                #label = colnames(DL_parcoor)[6], values = as.formula(paste("~",colnames(DL_parcoor[6])))),
+                list(range = c(0,3),
+                     #constraintrange = c(0,3),
+                     tickvals = c(0,1,2,3),
+                     label = ParCoor_labs[6], values = as.formula(paste("~",colnames(Guidance_parcoor[7])))),
+                #label = colnames(DL_parcoor)[7], values = as.formula(paste("~",colnames(DL_parcoor[7])))),
+                list(range = c(0,3),
+                     #constraintrange = c(0,3),
+                     tickvals = c(0,1,2,3),
+                     label = ParCoor_labs[7], values = as.formula(paste("~",colnames(Guidance_parcoor[8])))),
+                #label = colnames(DL_parcoor)[8], values = as.formula(paste("~",colnames(DL_parcoor[8])))),
+                list(range = c(0,3),
+                     #constraintrange = c(0,3),
+                     tickvals = c(0,1,2,3),
+                     label = ParCoor_labs[8], values = as.formula(paste("~",colnames(Guidance_parcoor[9])))),
+                #label = colnames(DL_parcoor)[9], values = as.formula(paste("~",colnames(DL_parcoor[9])))),
+                list(range = c(0,3),
+                     #constraintrange = c(0,3),
+                     tickvals = c(0,1,2,3),
+                     label = ParCoor_labs[9], values = as.formula(paste("~",colnames(Guidance_parcoor[10])))),
+                #label = colnames(DL_parcoor)[10], values = as.formula(paste("~",colnames(DL_parcoor[10])))),
+                list(range = c(0,3),
+                     #constraintrange = c(0,3),
+                     tickvals = c(0,1,2,3),
+                     label = ParCoor_labs[10], values = as.formula(paste("~",colnames(Guidance_parcoor[11]))))
+                #label = colnames(DL_parcoor)[11], values = as.formula(paste("~",colnames(DL_parcoor[11]))))
+              )
+      )  %>% layout(title="Comparison of guiding principle scores across example fisheries")
+
+      
     })
     
 })
