@@ -432,7 +432,8 @@ shinyServer(function(input, output,session) {
     })
 
     #Run attributes parallel coordinate plot
-    output$ParCoorPlot <- renderPlotly({
+    #output$ParCoorPlot <- renderPlotly({
+    output$ParCoorPlot <- renderPlot({
         # DL_parcoor<-archtypes.scores()
         # DL_parcoor<-rbind(DL_parcoor,DL_parcoor[1,])
         # DL_parcoor<-DL_parcoor[,-2]
@@ -448,69 +449,89 @@ shinyServer(function(input, output,session) {
         DL_parcoor<-DL_parcoor_scores()[Scenario_comp,-2]
       }
 #      width = 800, height = 400,              #layout(margin=list(t=0))
+        colnames(DL_parcoor)<-c("Scenario","D_types","D_Precision","D_Bias","D_SppID","D_Temporal","D_Spatial","R_Time","R_Funding","R_Capacity","R_Analysts2Stocks")
+        ggParcoord_att<-ggparcoord(data = DL_parcoor,
+                    columns=2:11,
+                    groupColumn = "Scenario",
+                    showPoints = TRUE,
+                    scale = "globalminmax",
+                    alphaLines = 0.1,
+                    title="Comparison of attribute scores across example fisheries")+
+                    geom_line(size=1.25)+
+                    scale_color_viridis(discrete=TRUE)+
+                    geom_point(size=4)+
+                    xlab("")+
+                    ylab("Attribute Score")+
+                    scale_x_discrete(guide = guide_axis(n.dodge = 2))+ 
+                    theme_bw()+
+                    theme(plot.title = element_text(size = 20),
+                          axis.title.y = element_text(size = 14),
+                          legend.position = "bottom")
+                    
+        print(ggParcoord_att)
 
         DL_parcoor$colorsin<-1:nrow(DL_parcoor)
-        plot_ly(DL_parcoor,type = 'parcoords',labelside="bottom",labelfont=list(size=10),labelangle=-15,
-                line = list(color = ~colorsin,
-                            colorscale = list(c(0,'red'),c(1,'green'),c(2,'blue'))),
+#         plot_ly(DL_parcoor,type = 'parcoords',labelside="bottom",labelfont=list(size=10),labelangle=-15,
+#                 line = list(color = ~colorsin,
+#                             colorscale = list(c(0,'red'),c(1,'green'),c(2,'blue'))),
                       
-                 dimensions = list(
-                           list(range = c(0,3),
-                                #constraintrange = c(0,3),
-                                tickvals = c(0,1,2,3),
-                                label = "# Types", values = as.formula(paste("~",colnames(DL_parcoor[2])))),
- #                               label = colnames(DL_parcoor)[2], values = as.formula(paste("~",colnames(DL_parcoor[2])))),
-                           list(range = c(0,3),
-                                #constraintrange = c(0,3),
-                                tickvals = c(0,1,2,3),
-                                label = "Precision", values = as.formula(paste("~",colnames(DL_parcoor[3])))),
-#                                label = colnames(DL_parcoor)[3], values = as.formula(paste("~",colnames(DL_parcoor[3])))),
-                           list(range = c(0,3),
-                                #constraintrange = c(0,3),
-                                tickvals = c(0,1,2,3),
-                                label = "Bias", values = as.formula(paste("~",colnames(DL_parcoor[4])))),                                
-#                                label = colnames(DL_parcoor)[4], values = as.formula(paste("~",colnames(DL_parcoor[4])))),
-                           list(range = c(0,3),
-                                #constraintrange = c(0,3),
-                                tickvals = c(0,1,2,3),
-                                label = "Species ID", values = as.formula(paste("~",colnames(DL_parcoor[5])))),
-                                #label = colnames(DL_parcoor)[5], values = as.formula(paste("~",colnames(DL_parcoor[5])))),
-                           list(range = c(0,3),
-                                #constraintrange = c(0,3),
-                                tickvals = c(0,1,2,3),
-                                label = "Spatial", values = as.formula(paste("~",colnames(DL_parcoor[6])))),
-                                #label = colnames(DL_parcoor)[6], values = as.formula(paste("~",colnames(DL_parcoor[6])))),
-                           list(range = c(0,3),
-                                #constraintrange = c(0,3),
-                                tickvals = c(0,1,2,3),
-                                label = "Temporal", values = as.formula(paste("~",colnames(DL_parcoor[7])))),
-                                #label = colnames(DL_parcoor)[7], values = as.formula(paste("~",colnames(DL_parcoor[7])))),
-                           list(range = c(0,3),
-                                #constraintrange = c(0,3),
-                                tickvals = c(0,1,2,3),
-                                label = "Time", values = as.formula(paste("~",colnames(DL_parcoor[8])))),
-                                #label = colnames(DL_parcoor)[8], values = as.formula(paste("~",colnames(DL_parcoor[8])))),
-                            list(range = c(0,3),
-                                #constraintrange = c(0,3),
-                                tickvals = c(0,1,2,3),
-                                label = "Funding", values = as.formula(paste("~",colnames(DL_parcoor[9])))),
-                                #label = colnames(DL_parcoor)[9], values = as.formula(paste("~",colnames(DL_parcoor[9])))),
-                            list(range = c(0,3),
-                                #constraintrange = c(0,3),
-                                tickvals = c(0,1,2,3),
-                                label = "Capacity", values = as.formula(paste("~",colnames(DL_parcoor[10])))),
-                                #label = colnames(DL_parcoor)[10], values = as.formula(paste("~",colnames(DL_parcoor[10])))),
-                            list(range = c(0,3),
-                                #constraintrange = c(0,3),
-                                tickvals = c(0,1,2,3),
-                                label = "analysts:stocks", values = as.formula(paste("~",colnames(DL_parcoor[11]))))
-                                #label = colnames(DL_parcoor)[11], values = as.formula(paste("~",colnames(DL_parcoor[11]))))
-                       )
-        ) %>% layout(title="Comparison of attribute scores across example fisheries")
+#                  dimensions = list(
+#                            list(range = c(0,3),
+#                                 #constraintrange = c(0,3),
+#                                 tickvals = c(0,1,2,3),
+#                                 label = "# Types", values = as.formula(paste("~",colnames(DL_parcoor[2])))),
+#  #                               label = colnames(DL_parcoor)[2], values = as.formula(paste("~",colnames(DL_parcoor[2])))),
+#                            list(range = c(0,3),
+#                                 #constraintrange = c(0,3),
+#                                 tickvals = c(0,1,2,3),
+#                                 label = "Precision", values = as.formula(paste("~",colnames(DL_parcoor[3])))),
+# #                                label = colnames(DL_parcoor)[3], values = as.formula(paste("~",colnames(DL_parcoor[3])))),
+#                            list(range = c(0,3),
+#                                 #constraintrange = c(0,3),
+#                                 tickvals = c(0,1,2,3),
+#                                 label = "Bias", values = as.formula(paste("~",colnames(DL_parcoor[4])))),                                
+# #                                label = colnames(DL_parcoor)[4], values = as.formula(paste("~",colnames(DL_parcoor[4])))),
+#                            list(range = c(0,3),
+#                                 #constraintrange = c(0,3),
+#                                 tickvals = c(0,1,2,3),
+#                                 label = "Species ID", values = as.formula(paste("~",colnames(DL_parcoor[5])))),
+#                                 #label = colnames(DL_parcoor)[5], values = as.formula(paste("~",colnames(DL_parcoor[5])))),
+#                            list(range = c(0,3),
+#                                 #constraintrange = c(0,3),
+#                                 tickvals = c(0,1,2,3),
+#                                 label = "Spatial", values = as.formula(paste("~",colnames(DL_parcoor[6])))),
+#                                 #label = colnames(DL_parcoor)[6], values = as.formula(paste("~",colnames(DL_parcoor[6])))),
+#                            list(range = c(0,3),
+#                                 #constraintrange = c(0,3),
+#                                 tickvals = c(0,1,2,3),
+#                                 label = "Temporal", values = as.formula(paste("~",colnames(DL_parcoor[7])))),
+#                                 #label = colnames(DL_parcoor)[7], values = as.formula(paste("~",colnames(DL_parcoor[7])))),
+#                            list(range = c(0,3),
+#                                 #constraintrange = c(0,3),
+#                                 tickvals = c(0,1,2,3),
+#                                 label = "Time", values = as.formula(paste("~",colnames(DL_parcoor[8])))),
+#                                 #label = colnames(DL_parcoor)[8], values = as.formula(paste("~",colnames(DL_parcoor[8])))),
+#                             list(range = c(0,3),
+#                                 #constraintrange = c(0,3),
+#                                 tickvals = c(0,1,2,3),
+#                                 label = "Funding", values = as.formula(paste("~",colnames(DL_parcoor[9])))),
+#                                 #label = colnames(DL_parcoor)[9], values = as.formula(paste("~",colnames(DL_parcoor[9])))),
+#                             list(range = c(0,3),
+#                                 #constraintrange = c(0,3),
+#                                 tickvals = c(0,1,2,3),
+#                                 label = "Capacity", values = as.formula(paste("~",colnames(DL_parcoor[10])))),
+#                                 #label = colnames(DL_parcoor)[10], values = as.formula(paste("~",colnames(DL_parcoor[10])))),
+#                             list(range = c(0,3),
+#                                 #constraintrange = c(0,3),
+#                                 tickvals = c(0,1,2,3),
+#                                 label = "analysts:stocks", values = as.formula(paste("~",colnames(DL_parcoor[11]))))
+#                                 #label = colnames(DL_parcoor)[11], values = as.formula(paste("~",colnames(DL_parcoor[11]))))
+#                        )
+#         ) %>% layout(title="Comparison of attribute scores across example fisheries")
         
     })
 
-    #Run attributes parallel coordinate plot
+    #Run guidance parallel coordinate plot
     output$ParCoorPlotGuidance <- renderPlotly({
       # DL_parcoor<-archtypes.scores()
       # DL_parcoor<-rbind(DL_parcoor,DL_parcoor[1,])
@@ -623,7 +644,11 @@ shinyServer(function(input, output,session) {
                      label = ParCoor_labs[10], values = as.formula(paste("~",colnames(Guidance_parcoor[11]))))
                 #label = colnames(DL_parcoor)[11], values = as.formula(paste("~",colnames(DL_parcoor[11]))))
               )
-      )  %>% layout(title="Comparison of guiding principle scores across example fisheries")
+      )  %>% layout(title="Comparison of guiding principle scores across example fisheries", 
+                    legend = list(orientation = "v",   # show entries horizontally
+                                  xanchor = "center",  # use center of legend as anchor
+                                  #x = 0.5,
+                                  y=-0.2))             # put legend in center of x-axis)
 
       
     })

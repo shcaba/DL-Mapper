@@ -173,7 +173,10 @@ fluidRow(column(width=3,numericInput("Docomplex","Do complex",value=3,min=0,max=
               column(width=6,plotlyOutput("QuadPlot")),
               column(width=3,"")),
             #fluidRow(column(width=6,h3("Comparison of attribute scores across example fisheries", align = "left"))),
-            fluidRow(column(width=6,plotlyOutput("ParCoorPlot")),
+#            fluidRow(column(width=6,plotlyOutput("ParCoorPlot")),
+            br(),
+            br(),
+            fluidRow(column(width=6,plotOutput("ParCoorPlot")),
                      column(width=6,plotlyOutput("ParCoorPlotGuidance")))
 #            br(),
 #            br(),
