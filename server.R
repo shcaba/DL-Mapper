@@ -4,6 +4,7 @@ library(ggplot2)
 library(GGally)
 library(hrbrthemes)
 library(viridis)
+library(wesanderson)
 library(plotly)
 library(reshape2)
 library(dplyr)
@@ -250,9 +251,8 @@ shinyServer(function(input, output,session) {
 #############
 ### PLOTS ###
 #############
-
-    output$LolliPlot <- renderPlot({
-        #Lollipop
+    #Lollipop for attributes
+    output$LolliPlot <- renderPlotly({
         #DL_parcoor<-archtypes.scores()
         #DL_parcoor<-rbind(DL_parcoor,DL_parcoor[1,])
         #DL_parcoor<-DL_parcoor[,-2]
@@ -277,7 +277,13 @@ shinyServer(function(input, output,session) {
         }
         else(DL_parcoor<-archtypes.scores()[1,-c(1,2)])
       }
-#        DR_plot_lollipop<-melt(DL_parcoor)
+
+      output$downloadAttScores <- downloadHandler(
+        filename = function() {paste0("Attribute_Scores.csv") },
+        content = function(file) {write.csv(DL_parcoor_scores(), file=file)}
+      )
+      
+      #        DR_plot_lollipop<-melt(DL_parcoor)
         DR_labels<-c("Data: #Types","Data: Precision","Data: Bias","Data: Spp ID","Data: Spatial","Data: Temporal", "Res: Time","Res: Funding","Res: Capacity","Res: Analysts:Stocks")
         DR_plot_lollipop<-data.frame(Attribute=DR_labels,Score=as.numeric(DL_parcoor),Type="A")
         DR_plot_lollipop$Attribute<-factor(DR_plot_lollipop$Attribute,levels=rev(unique(DR_plot_lollipop$Attribute)))
@@ -285,32 +291,28 @@ shinyServer(function(input, output,session) {
         DR_plot_lollipop$Type[grep("Data",DR_plot_lollipop$Attribute)]<-"Data"
         DR_plot_lollipop$Type[grep("Res",DR_plot_lollipop$Attribute)]<-"Resource"
         #DR_plot_lollipop_sub<-subset(DR_plot_lollipop,Scenario==Scenario[nrow(DR_plot_lollipop)])
-        lolliggplot<-ggplot(DR_plot_lollipop, aes(x=Attribute, y=Score,color=Type)) +
-            geom_point(size=6) + 
+        lolliggplot<-ggplotly(ggplot(DR_plot_lollipop, aes(x=Attribute, y=Score,color=Type)) +
+            geom_point(size=4) +
             scale_y_continuous(limits=c(0,3))+
             ggtitle(input$fishery_choice)+
             coord_flip() +
             geom_segment( aes(x=Attribute, xend=Attribute, y=0, yend=Score),lwd=2)+
             theme(legend.position = "none")+
             xlab("Attributes")+
-            ylab("Constraint score")
-        print(lolliggplot)
-        output$downloadlollipopplots <- downloadHandler(
-            filename = function() { paste0('Lollipop',timestamp, '.png')},
-            content = function(file) {
-                png(file, type='cairo',width=800,height=720)
-                print(lolliggplot)
-                dev.off()},contentType = 'image/png') 
+            ylab("Constraint score"))
+        lolliggplot
+        # output$downloadlollipopplots <- downloadHandler(
+        #     filename = function() { paste0('Lollipop',timestamp, '.png')},
+        #     content = function(file) {
+        #         png(file, type='cairo',width=800,height=720)
+        #         print(lolliggplot)
+        #         dev.off()},contentType = 'image/png') 
         
-        output$downloadAttScores <- downloadHandler(
-          filename = function() {paste0("Attribute_Scores.csv") },
-          content = function(file) {write.csv(DL_parcoor_scores(), file=file)}
-        )
         
             })
     
 
-    output$LolliPlot.principles <- renderPlot({
+    output$LolliPlot.principles <- renderPlotly({
       if(length(unlist(strsplit(input$Spp_lab,split=",")))==0|input$fishery_choice=="")
       {
         DL_parcoor<-archtypes.scores()[4,-c(1,2)]
@@ -380,23 +382,25 @@ shinyServer(function(input, output,session) {
       
       Guidance_plot_lollipop<-data.frame(Names=Principle.names,Scores=Principle.scores,Type=c(1,1,1,5,5,5,5,9,9,9))
       Guidance_plot_lollipop$Names<-factor(Guidance_plot_lollipop$Names,levels=rev(unique(Guidance_plot_lollipop$Names)))
-      Lolliggplot.principles<-ggplot(Guidance_plot_lollipop, aes(x=Names, y=Scores,color=Type)) +
-        geom_point(size=6) +
-        scale_color_viridis()+
+      Lolliggplot.principles<-ggplotly(ggplot(Guidance_plot_lollipop, aes(x=Names, y=Scores,color=as.factor(Type))) +
+        geom_point(size=4) +
+        #scale_color_viridis()+
+        scale_colour_manual(values = c("#236192","#658D1B","#1D252D"))+
         scale_y_continuous(limits=c(0,3))+
         ggtitle(input$fishery_choice)+
         coord_flip() +
         geom_segment( aes(x=Names, xend=Names, y=0, yend=Scores),lwd=2)+
         theme(legend.position = "none")+
         xlab("Guidance options")+
-        ylab("Recommendation score")
-      print(Lolliggplot.principles)
-      output$downloadlollipop.principles <- downloadHandler(
-        filename = function() { paste0('Lolliggplot.principles',timestamp, '.png')},
-        content = function(file) {
-          png(file, type='cairo',width=800,height=720)
-          print(Lolliggplot.principles)
-          dev.off()},contentType = 'image/png')
+        ylab("Recommendation score"))
+      Lolliggplot.principles
+      
+      # output$downloadlollipop.principles <- downloadHandler(
+      #   filename = function() { paste0('Lolliggplot.principles',timestamp, '.png')},
+      #   content = function(file) {
+      #     png(file, type='cairo',width=800,height=720)
+      #     print(Lolliggplot.principles)
+      #     dev.off()},contentType = 'image/png')
       
       # output$downloadGuideScores <- downloadHandler(
       #   filename = function() {paste0("Guidance_Scores.csv") },
@@ -422,10 +426,11 @@ shinyServer(function(input, output,session) {
           Scenario_comp<-DL_parcoor_in$Scenario%in%c(DL_parcoor_in$Scenario[1:4],input$fishery_compare)
           DR_plot<-data.frame(Scenario=DL_parcoor_in$Scenario[Scenario_comp],Shapes=DL_parcoor_in$Shapes[Scenario_comp],Data=rowMeans(DL_parcoor_in[Scenario_comp,3:8]),Resources=rowMeans(DL_parcoor_in[Scenario_comp,9:12]))
         }
-      res<-ggplotly(ggplot(DR_plot,aes(Data,Resources,fill=Scenario))+
+      res<-ggplotly(ggplot(DR_plot,aes(Data,Resources,fill=factor(Scenario)))+
             geom_point(size=3,shape=DR_plot$Shapes)+
             theme(legend.position = "none")+
-            scale_fill_viridis(discrete = TRUE)+
+            scale_fill_manual(values = wes_palette("Darjeeling2"))+
+            #scale_fill_viridis(discrete = TRUE)+
             geom_vline(xintercept=1.5,color="red",lty=2)+
             geom_hline(yintercept=1.5,color="red",lty=2))
         res
@@ -433,7 +438,7 @@ shinyServer(function(input, output,session) {
 
     #Run attributes parallel coordinate plot
     #output$ParCoorPlot <- renderPlotly({
-    output$ParCoorPlot <- renderPlot({
+    output$ParCoorPlot <- renderPlotly({
         # DL_parcoor<-archtypes.scores()
         # DL_parcoor<-rbind(DL_parcoor,DL_parcoor[1,])
         # DL_parcoor<-DL_parcoor[,-2]
@@ -450,27 +455,27 @@ shinyServer(function(input, output,session) {
       }
 #      width = 800, height = 400,              #layout(margin=list(t=0))
         colnames(DL_parcoor)<-c("Scenario","D_types","D_Precision","D_Bias","D_SppID","D_Temporal","D_Spatial","R_Time","R_Funding","R_Capacity","R_Analysts2Stocks")
-        ggParcoord_att<-ggparcoord(data = DL_parcoor,
+        gg<-ggparcoord(data = DL_parcoor,
                     columns=2:11,
                     groupColumn = "Scenario",
                     showPoints = TRUE,
                     scale = "globalminmax",
-                    alphaLines = 0.1,
+                    alphaLines = 0.05,
                     title="Comparison of attribute scores across example fisheries")+
-                    geom_line(size=1.25)+
-                    scale_color_viridis(discrete=TRUE)+
-                    geom_point(size=4)+
+                    geom_line(size=1)+
+                    scale_color_manual(values = wes_palette("Darjeeling2"))+
+                    geom_point(size=2)+
                     xlab("")+
                     ylab("Attribute Score")+
                     scale_x_discrete(guide = guide_axis(n.dodge = 2))+ 
                     theme_bw()+
-                    theme(plot.title = element_text(size = 20),
+                    theme(plot.title = element_text(size = 18),
                           axis.title.y = element_text(size = 14),
                           legend.position = "bottom")
                     
-        print(ggParcoord_att)
+    ggParcoord_att<-ggplotly(gg)
 
-        DL_parcoor$colorsin<-1:nrow(DL_parcoor)
+#        DL_parcoor$colorsin<-1:nrow(DL_parcoor)
 #         plot_ly(DL_parcoor,type = 'parcoords',labelside="bottom",labelfont=list(size=10),labelangle=-15,
 #                 line = list(color = ~colorsin,
 #                             colorscale = list(c(0,'red'),c(1,'green'),c(2,'blue'))),
@@ -549,10 +554,11 @@ shinyServer(function(input, output,session) {
       }
       #      width = 800, height = 400,              #layout(margin=list(t=0))
       
-      Guidance_parcoor<-DL_parcoor
+      Guidance_parcoor<-DL_parcoor[,-12]
       ParCoor_labs<-c("Data training", "Improve data","Local input","Analytical training","Simple methods","Complex models","Improve Mod. Specs.","Static MMs","Dynamic CRs","Improve governance")
-      colnames(Guidance_parcoor)[2:11]<-c("Train_Data", "Improve_Data","LEK","Analytical_Training","Simple_Models","Complex_Models","Improve_ModSpecs","StaticMMs","DynamicCRs","Improve_gov")
-      Guidance_parcoor$colorsin<-1:nrow(Guidance_parcoor)
+      colnames(Guidance_parcoor)[2:11]<-ParCoor_labs
+      #colnames(Guidance_parcoor)[2:11]<-c("Train_Data", "Improve_Data","LEK","Analytical_Training","Simple_Models","Complex_Models","Improve_ModSpecs","StaticMMs","DynamicCRs","Improve_gov")
+      #Guidance_parcoor$colorsin<-1:nrow(Guidance_parcoor)
       
       #####
       #Train on data
@@ -588,67 +594,87 @@ shinyServer(function(input, output,session) {
         content = function(file) {write.csv(Guidance_parcoor, file=file)}
       )
       
+      gg<-ggparcoord(data = Guidance_parcoor,
+                                          columns=2:11,
+                                          groupColumn = "Scenario",
+                                          showPoints = TRUE,
+                                          scale = "globalminmax",
+                                          alphaLines = 0.05,
+                                          title="Comparison of guiding principle scores across example fisheries")+
+                                 geom_line(size=1)+
+                                 scale_color_manual(values = wes_palette("Darjeeling2"))+
+                                 geom_point(size=2)+
+                                 xlab("")+
+                                 ylab("Attribute Score")+
+                                 theme_bw()+
+                                 scale_x_discrete(guide = guide_axis(n.dodge = 2))+ 
+                                 theme(plot.title = element_text(size = 18),
+                                       axis.title.y = element_text(size = 14),
+                                       legend.position = "bottom",
+                                       axis.text.x = element_text(angle=15))
       
-      p<-plot_ly(Guidance_parcoor,type = 'parcoords',name="Test",labelside="bottom",labelfont=list(size=10),labelangle=-15,
-              line = list(color = ~colorsin,
-                          colorscale = list(c(0,'red'),c(1,'green'),c(2,'blue'))),
-              dimensions = list(
-                list(range = c(0,3),
-                     #constraintrange = c(0,3),
-                     tickvals = c(0,1,2,3),
-                     label = ParCoor_labs[1], values = as.formula(paste("~",colnames(Guidance_parcoor)[2]))),
-                #                               label = colnames(DL_parcoor)[2], values = as.formula(paste("~",colnames(DL_parcoor[2])))),
-                list(range = c(0,3),
-                     #constraintrange = c(0,3),
-                     tickvals = c(0,1,2,3),
-                     label = ParCoor_labs[2], values = as.formula(paste("~",colnames(Guidance_parcoor[3])))),
-                #                                label = colnames(DL_parcoor)[3], values = as.formula(paste("~",colnames(DL_parcoor[3])))),
-                list(range = c(0,3),
-                     #constraintrange = c(0,3),
-                     tickvals = c(0,1,2,3),
-                     label = ParCoor_labs[3], values = as.formula(paste("~",colnames(Guidance_parcoor[4])))),                                
-                #                                label = colnames(DL_parcoor)[4], values = as.formula(paste("~",colnames(DL_parcoor[4])))),
-                list(range = c(0,3),
-                     #constraintrange = c(0,3),
-                     tickvals = c(0,1,2,3),
-                     label = ParCoor_labs[4], values = as.formula(paste("~",colnames(Guidance_parcoor[5])))),
-                #label = colnames(DL_parcoor)[5], values = as.formula(paste("~",colnames(DL_parcoor[5])))),
-                list(range = c(0,3),
-                     #constraintrange = c(0,3),
-                     tickvals = c(0,1,2,3),
-                     label = ParCoor_labs[5], values = as.formula(paste("~",colnames(Guidance_parcoor[6])))),
-                #label = colnames(DL_parcoor)[6], values = as.formula(paste("~",colnames(DL_parcoor[6])))),
-                list(range = c(0,3),
-                     #constraintrange = c(0,3),
-                     tickvals = c(0,1,2,3),
-                     label = ParCoor_labs[6], values = as.formula(paste("~",colnames(Guidance_parcoor[7])))),
-                #label = colnames(DL_parcoor)[7], values = as.formula(paste("~",colnames(DL_parcoor[7])))),
-                list(range = c(0,3),
-                     #constraintrange = c(0,3),
-                     tickvals = c(0,1,2,3),
-                     label = ParCoor_labs[7], values = as.formula(paste("~",colnames(Guidance_parcoor[8])))),
-                #label = colnames(DL_parcoor)[8], values = as.formula(paste("~",colnames(DL_parcoor[8])))),
-                list(range = c(0,3),
-                     #constraintrange = c(0,3),
-                     tickvals = c(0,1,2,3),
-                     label = ParCoor_labs[8], values = as.formula(paste("~",colnames(Guidance_parcoor[9])))),
-                #label = colnames(DL_parcoor)[9], values = as.formula(paste("~",colnames(DL_parcoor[9])))),
-                list(range = c(0,3),
-                     #constraintrange = c(0,3),
-                     tickvals = c(0,1,2,3),
-                     label = ParCoor_labs[9], values = as.formula(paste("~",colnames(Guidance_parcoor[10])))),
-                #label = colnames(DL_parcoor)[10], values = as.formula(paste("~",colnames(DL_parcoor[10])))),
-                list(range = c(0,3),
-                     #constraintrange = c(0,3),
-                     tickvals = c(0,1,2,3),
-                     label = ParCoor_labs[10], values = as.formula(paste("~",colnames(Guidance_parcoor[11]))))
-                #label = colnames(DL_parcoor)[11], values = as.formula(paste("~",colnames(DL_parcoor[11]))))
-              )
-      )  %>% layout(title="Comparison of guiding principle scores across example fisheries", 
-                    legend = list(orientation = "v",   # show entries horizontally
-                                  xanchor = "center",  # use center of legend as anchor
-                                  #x = 0.5,
-                                  y=-0.2))             # put legend in center of x-axis)
+      ggParcoord_guide<-ggplotly(gg)
+      
+      # p<-plot_ly(Guidance_parcoor,type = 'parcoords',name="Test",labelside="bottom",labelfont=list(size=10),labelangle=-15,
+      #         line = list(color = ~colorsin,
+      #                     colorscale = list(c(0,'red'),c(1,'green'),c(2,'blue'))),
+      #         dimensions = list(
+      #           list(range = c(0,3),
+      #                #constraintrange = c(0,3),
+      #                tickvals = c(0,1,2,3),
+      #                label = ParCoor_labs[1], values = as.formula(paste("~",colnames(Guidance_parcoor)[2]))),
+      #           #                               label = colnames(DL_parcoor)[2], values = as.formula(paste("~",colnames(DL_parcoor[2])))),
+      #           list(range = c(0,3),
+      #                #constraintrange = c(0,3),
+      #                tickvals = c(0,1,2,3),
+      #                label = ParCoor_labs[2], values = as.formula(paste("~",colnames(Guidance_parcoor[3])))),
+      #           #                                label = colnames(DL_parcoor)[3], values = as.formula(paste("~",colnames(DL_parcoor[3])))),
+      #           list(range = c(0,3),
+      #                #constraintrange = c(0,3),
+      #                tickvals = c(0,1,2,3),
+      #                label = ParCoor_labs[3], values = as.formula(paste("~",colnames(Guidance_parcoor[4])))),                                
+      #           #                                label = colnames(DL_parcoor)[4], values = as.formula(paste("~",colnames(DL_parcoor[4])))),
+      #           list(range = c(0,3),
+      #                #constraintrange = c(0,3),
+      #                tickvals = c(0,1,2,3),
+      #                label = ParCoor_labs[4], values = as.formula(paste("~",colnames(Guidance_parcoor[5])))),
+      #           #label = colnames(DL_parcoor)[5], values = as.formula(paste("~",colnames(DL_parcoor[5])))),
+      #           list(range = c(0,3),
+      #                #constraintrange = c(0,3),
+      #                tickvals = c(0,1,2,3),
+      #                label = ParCoor_labs[5], values = as.formula(paste("~",colnames(Guidance_parcoor[6])))),
+      #           #label = colnames(DL_parcoor)[6], values = as.formula(paste("~",colnames(DL_parcoor[6])))),
+      #           list(range = c(0,3),
+      #                #constraintrange = c(0,3),
+      #                tickvals = c(0,1,2,3),
+      #                label = ParCoor_labs[6], values = as.formula(paste("~",colnames(Guidance_parcoor[7])))),
+      #           #label = colnames(DL_parcoor)[7], values = as.formula(paste("~",colnames(DL_parcoor[7])))),
+      #           list(range = c(0,3),
+      #                #constraintrange = c(0,3),
+      #                tickvals = c(0,1,2,3),
+      #                label = ParCoor_labs[7], values = as.formula(paste("~",colnames(Guidance_parcoor[8])))),
+      #           #label = colnames(DL_parcoor)[8], values = as.formula(paste("~",colnames(DL_parcoor[8])))),
+      #           list(range = c(0,3),
+      #                #constraintrange = c(0,3),
+      #                tickvals = c(0,1,2,3),
+      #                label = ParCoor_labs[8], values = as.formula(paste("~",colnames(Guidance_parcoor[9])))),
+      #           #label = colnames(DL_parcoor)[9], values = as.formula(paste("~",colnames(DL_parcoor[9])))),
+      #           list(range = c(0,3),
+      #                #constraintrange = c(0,3),
+      #                tickvals = c(0,1,2,3),
+      #                label = ParCoor_labs[9], values = as.formula(paste("~",colnames(Guidance_parcoor[10])))),
+      #           #label = colnames(DL_parcoor)[10], values = as.formula(paste("~",colnames(DL_parcoor[10])))),
+      #           list(range = c(0,3),
+      #                #constraintrange = c(0,3),
+      #                tickvals = c(0,1,2,3),
+      #                label = ParCoor_labs[10], values = as.formula(paste("~",colnames(Guidance_parcoor[11]))))
+      #           #label = colnames(DL_parcoor)[11], values = as.formula(paste("~",colnames(DL_parcoor[11]))))
+      #         )
+      # )  %>% layout(title="Comparison of guiding principle scores across example fisheries", 
+      #               legend = list(orientation = "v",   # show entries horizontally
+      #                             xanchor = "center",  # use center of legend as anchor
+      #                             #x = 0.5,
+      #                             y=-0.2))             # put legend in center of x-axis)
 
       
     })
