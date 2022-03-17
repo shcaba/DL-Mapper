@@ -353,31 +353,31 @@ shinyServer(function(input, output,session) {
       
       #####
       #Train on data
-      if(mean(DR_plot_lollipop$Score[1:6])>=input$traindata){Principle.scores[1]<-3}
-      if(mean(DR_plot_lollipop$Score[1:6])<input$traindata){Principle.scores[1]<-mean(DR_plot_lollipop$Score[c(1:6,9)])}
+      if(mean(DR_plot_lollipop$Score[1:6])>=3){Principle.scores[1]<-3}
+      if(mean(DR_plot_lollipop$Score[1:6])<3){Principle.scores[1]<-mean(DR_plot_lollipop$Score[c(1:6,9)])}
       #Improve data
       Principle.scores[2]<-mean(DR_plot_lollipop$Score[c(1:6,10)])
       #Local Knowledge
-      if(mean(DR_plot_lollipop$Score[1:6])>=input$locknow){Principle.scores[3]<-3}
-      if(mean(DR_plot_lollipop$Score[1:6])<input$locknow){Principle.scores[3]<-mean(c(mean(DR_plot_lollipop$Score[1:6]),mean(DR_plot_lollipop$Score[7:10])))}
+      if(mean(DR_plot_lollipop$Score[1:6])>=3){Principle.scores[3]<-3}
+      if(mean(DR_plot_lollipop$Score[1:6])<3){Principle.scores[3]<-mean(c(mean(DR_plot_lollipop$Score[1:6]),mean(DR_plot_lollipop$Score[7:10])))}
       #Train on assessments
       Principle.scores[4]<-mean(c(DR_plot_lollipop$Score[9],mean(DR_plot_lollipop$Score[1:6]),mean(DR_plot_lollipop$Score[c(7,8,10)])))
       #Do DL assessments
-      if(mean(DR_plot_lollipop$Score[c(1,7:10)])>=input$DoDL){Principle.scores[5]<-0}
-      if(mean(DR_plot_lollipop$Score[c(1,7:10)])<input$DoDL){Principle.scores[5]<-mean(DR_plot_lollipop$Score[c(1,7:10)])}
+      if(mean(DR_plot_lollipop$Score[c(1,7:10)])>=3){Principle.scores[5]<-0}
+      if(mean(DR_plot_lollipop$Score[c(1,7:10)])<3){Principle.scores[5]<-mean(DR_plot_lollipop$Score[c(1,7:10)])}
       #Do more complex methods
-      if(mean(DR_plot_lollipop$Score[1:6])>=input$Docomplex|mean(DR_plot_lollipop$Score[7:10])>=input$Docomplex){Principle.scores[6]<-0}
+      if(mean(DR_plot_lollipop$Score[1:6])>=3|mean(DR_plot_lollipop$Score[7:10])>=3){Principle.scores[6]<-0}
       else {Principle.scores[6]<-mean(c(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10])))}
       #Improve Model specifications
-      if(mean(DR_plot_lollipop$Score[1:6])>=input$Modspecs|mean(DR_plot_lollipop$Score[7:10])>=input$Modspecs){Principle.scores[7]<-0}
+      if(mean(DR_plot_lollipop$Score[1:6])>=3|mean(DR_plot_lollipop$Score[7:10])>=3){Principle.scores[7]<-0}
       else {Principle.scores[7]<-mean(c(3-mean(DR_plot_lollipop$Score[1:6]),3-mean(DR_plot_lollipop$Score[7:10])))}
       #Static MMs
       Principle.scores[8]<-max(mean(DR_plot_lollipop$Score[c(1:6)]),mean(DR_plot_lollipop$Score[c(7:10)]))
       #Dynamics MMs
       Principle.scores[9]<-mean(c(3-DR_plot_lollipop$Score[1],3-mean(DR_plot_lollipop$Score[c(5,7:10)])))
       #Improve governance
-      if(mean(DR_plot_lollipop$Score[7:9])>=input$Gov){Principle.scores[10]<-3}
-      if(mean(DR_plot_lollipop$Score[7:9])<input$Gov){Principle.scores[10]<-mean(DR_plot_lollipop$Score[c(1,4,7:9)])}
+      if(mean(DR_plot_lollipop$Score[7:9])>=3){Principle.scores[10]<-3}
+      if(mean(DR_plot_lollipop$Score[7:9])<3){Principle.scores[10]<-mean(DR_plot_lollipop$Score[c(1,4,7:9)])}
       #####
       
       Guidance_plot_lollipop<-data.frame(Names=Principle.names,Scores=Principle.scores,Type=c(1,1,1,5,5,5,5,9,9,9))
@@ -562,23 +562,23 @@ shinyServer(function(input, output,session) {
       
       #####
       #Train on data
-      Guidance_parcoor[rowMeans(DL_parcoor[,2:7])>=input$traindata,2]<-3
-      Guidance_parcoor[rowMeans(DL_parcoor[,2:7])<input$traindata,2]<-rowMeans(DL_parcoor[rowMeans(DL_parcoor[,2:7])<input$traindata,c(2:7,10)])
+      Guidance_parcoor[rowMeans(DL_parcoor[,2:7])>=3,2]<-3
+      Guidance_parcoor[rowMeans(DL_parcoor[,2:7])<3,2]<-rowMeans(DL_parcoor[rowMeans(DL_parcoor[,2:7])<3,c(2:7,10)])
       #Improve data
       Guidance_parcoor[,3]<-rowMeans(DL_parcoor[,c(2:7,11)])
       #Local Knowledge
-      Guidance_parcoor[rowMeans(DL_parcoor[,2:7])>=input$locknow,4]<-3
-      Guidance_parcoor[rowMeans(DL_parcoor[,2:7])<input$locknow,4]<-rowMeans(cbind(rowMeans(DL_parcoor[rowMeans(DL_parcoor[,2:7])<input$locknow,2:7]),rowMeans(DL_parcoor[rowMeans(DL_parcoor[,2:7])<input$locknow,8:11])))
+      Guidance_parcoor[rowMeans(DL_parcoor[,2:7])>=3,4]<-3
+      Guidance_parcoor[rowMeans(DL_parcoor[,2:7])<3,4]<-rowMeans(cbind(rowMeans(DL_parcoor[rowMeans(DL_parcoor[,2:7])<3,2:7]),rowMeans(DL_parcoor[rowMeans(DL_parcoor[,2:7])<3,8:11])))
       #Train on assessments
       Guidance_parcoor[,5]<-rowMeans(cbind(DL_parcoor[,10],rowMeans(DL_parcoor[,2:7]),rowMeans(DL_parcoor[,c(8,9,11)])))
       #Do DL assessments
-      Guidance_parcoor[rowMeans(DL_parcoor[,c(2,8:11)])>=input$DoDL,6]<-0
-      Guidance_parcoor[rowMeans(DL_parcoor[,c(2,8:11)])<input$DoDL,6]<-rowMeans(DL_parcoor[rowMeans(DL_parcoor[,c(2,8:11)])<input$DoDL,c(2,8:11)])
+      Guidance_parcoor[rowMeans(DL_parcoor[,c(2,8:11)])>=3,6]<-0
+      Guidance_parcoor[rowMeans(DL_parcoor[,c(2,8:11)])<3,6]<-rowMeans(DL_parcoor[rowMeans(DL_parcoor[,c(2,8:11)])<3,c(2,8:11)])
       #Do more complex methods
-      Guidance_parcoor[rowMeans(DL_parcoor[2:7])>=input$Docomplex|rowMeans(DL_parcoor[8:11])>=input$Docomplex,7]<-0
-      Guidance_parcoor[!(rowMeans(DL_parcoor[2:7])>=input$Docomplex|rowMeans(DL_parcoor[8:11])>=input$Docomplex),7]<-rowMeans(cbind(3-rowMeans(DL_parcoor[!(rowMeans(DL_parcoor[2:7])>=input$Docomplex|rowMeans(DL_parcoor[8:11])>=input$Docomplex),2:7]),3-rowMeans(DL_parcoor[!(rowMeans(DL_parcoor[2:7])>=input$Docomplex|rowMeans(DL_parcoor[8:11])>=input$Docomplex),8:11])))
+      Guidance_parcoor[rowMeans(DL_parcoor[2:7])>=3|rowMeans(DL_parcoor[8:11])>=3,7]<-0
+      Guidance_parcoor[!(rowMeans(DL_parcoor[2:7])>=3|rowMeans(DL_parcoor[8:11])>=3),7]<-rowMeans(cbind(3-rowMeans(DL_parcoor[!(rowMeans(DL_parcoor[2:7])>=3|rowMeans(DL_parcoor[8:11])>=3),2:7]),3-rowMeans(DL_parcoor[!(rowMeans(DL_parcoor[2:7])>=3|rowMeans(DL_parcoor[8:11])>=3),8:11])))
       #Improve Model specifications
-      Modspecs_TF<-rowMeans(DL_parcoor[,2:7])>=input$Modspecs|rowMeans(DL_parcoor[,8:11])>=input$Modspecs
+      Modspecs_TF<-rowMeans(DL_parcoor[,2:7])>=3|rowMeans(DL_parcoor[,8:11])>=3
       Guidance_parcoor[Modspecs_TF,8]<-0
       Guidance_parcoor[!Modspecs_TF,8]<-rowMeans(cbind(3-rowMeans(DL_parcoor[!Modspecs_TF,2:7]),3-rowMeans(DL_parcoor[!Modspecs_TF,8:11])))
       #Static MMs
@@ -586,10 +586,11 @@ shinyServer(function(input, output,session) {
       #Dynamics MMs
       Guidance_parcoor[,10]<-rowMeans(cbind(3-DL_parcoor[,2],3-rowMeans(DL_parcoor[,c(6,8:11)])))
       #Improve governance
-      Guidance_parcoor[rowMeans(DL_parcoor[,8:10])>=input$Gov,11]<-3
-      Guidance_parcoor[rowMeans(DL_parcoor[8:10])<input$Gov,11]<-rowMeans(DL_parcoor[rowMeans(DL_parcoor[8:10])<input$Gov,c(2,5,8:10)])
+      Guidance_parcoor[rowMeans(DL_parcoor[,8:10])>=2.5,11]<-3
+      Guidance_parcoor[rowMeans(DL_parcoor[8:10])<2.5,11]<-rowMeans(DL_parcoor[rowMeans(DL_parcoor[8:10])<2.5,c(2,5,8:10)])
       #####
-      output$downloadGuideScores <- downloadHandler(
+
+        output$downloadGuideScores <- downloadHandler(
         filename = function() {paste0("Guidance_Scores.csv") },
         content = function(file) {write.csv(Guidance_parcoor, file=file)}
       )
@@ -680,15 +681,33 @@ shinyServer(function(input, output,session) {
     })
     
 })
-
-
-
-
-
-
-#         DL_parcoor_comps<-eventReactive({length(unlist(strsplit(input$Spp_lab,split=",")))>0},{
-#           if(input$Spp_lab==""){DL_parcoor_comps<-archtypes.scores.comp(input$Spp_lab)}
-#           else{DL_parcoor_comps<-archtypes.scores.comp(unlist(strsplit(input$Spp_lab,split=",")))}
-#           print(DL_parcoor_comps[(nrow(DL_parcoor_comps)-1):nrow(DL_parcoor_comps),])
-#           DL_parcoor_comps   
-#        })
+# 
+# #####
+# #Train on data
+# Guidance_parcoor[rowMeans(DL_parcoor[,2:7])>=input$traindata,2]<-3
+# Guidance_parcoor[rowMeans(DL_parcoor[,2:7])<input$traindata,2]<-rowMeans(DL_parcoor[rowMeans(DL_parcoor[,2:7])<input$traindata,c(2:7,10)])
+# #Improve data
+# Guidance_parcoor[,3]<-rowMeans(DL_parcoor[,c(2:7,11)])
+# #Local Knowledge
+# Guidance_parcoor[rowMeans(DL_parcoor[,2:7])>=input$locknow,4]<-3
+# Guidance_parcoor[rowMeans(DL_parcoor[,2:7])<input$locknow,4]<-rowMeans(cbind(rowMeans(DL_parcoor[rowMeans(DL_parcoor[,2:7])<input$locknow,2:7]),rowMeans(DL_parcoor[rowMeans(DL_parcoor[,2:7])<input$locknow,8:11])))
+# #Train on assessments
+# Guidance_parcoor[,5]<-rowMeans(cbind(DL_parcoor[,10],rowMeans(DL_parcoor[,2:7]),rowMeans(DL_parcoor[,c(8,9,11)])))
+# #Do DL assessments
+# Guidance_parcoor[rowMeans(DL_parcoor[,c(2,8:11)])>=input$DoDL,6]<-0
+# Guidance_parcoor[rowMeans(DL_parcoor[,c(2,8:11)])<input$DoDL,6]<-rowMeans(DL_parcoor[rowMeans(DL_parcoor[,c(2,8:11)])<input$DoDL,c(2,8:11)])
+# #Do more complex methods
+# Guidance_parcoor[rowMeans(DL_parcoor[2:7])>=input$Docomplex|rowMeans(DL_parcoor[8:11])>=input$Docomplex,7]<-0
+# Guidance_parcoor[!(rowMeans(DL_parcoor[2:7])>=input$Docomplex|rowMeans(DL_parcoor[8:11])>=input$Docomplex),7]<-rowMeans(cbind(3-rowMeans(DL_parcoor[!(rowMeans(DL_parcoor[2:7])>=input$Docomplex|rowMeans(DL_parcoor[8:11])>=input$Docomplex),2:7]),3-rowMeans(DL_parcoor[!(rowMeans(DL_parcoor[2:7])>=input$Docomplex|rowMeans(DL_parcoor[8:11])>=input$Docomplex),8:11])))
+# #Improve Model specifications
+# Modspecs_TF<-rowMeans(DL_parcoor[,2:7])>=input$Modspecs|rowMeans(DL_parcoor[,8:11])>=input$Modspecs
+# Guidance_parcoor[Modspecs_TF,8]<-0
+# Guidance_parcoor[!Modspecs_TF,8]<-rowMeans(cbind(3-rowMeans(DL_parcoor[!Modspecs_TF,2:7]),3-rowMeans(DL_parcoor[!Modspecs_TF,8:11])))
+# #Static MMs
+# Guidance_parcoor[,9]<-apply(X=cbind(rowMeans(DL_parcoor[,c(2:7)]),rowMeans(DL_parcoor[,c(8:11)])), MARGIN=1, FUN=max)
+# #Dynamics MMs
+# Guidance_parcoor[,10]<-rowMeans(cbind(3-DL_parcoor[,2],3-rowMeans(DL_parcoor[,c(6,8:11)])))
+# #Improve governance
+# Guidance_parcoor[rowMeans(DL_parcoor[,8:10])>=input$Gov,11]<-3
+# Guidance_parcoor[rowMeans(DL_parcoor[8:10])<input$Gov,11]<-rowMeans(DL_parcoor[rowMeans(DL_parcoor[8:10])<input$Gov,c(2,5,8:10)])
+# #####

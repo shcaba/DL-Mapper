@@ -128,17 +128,17 @@ shinyUI(fluidPage(
                       "right", options = list(container = "body")),
 
 
-br(),
-br(),
-br(),
-fluidRow(column(width=3,numericInput("traindata","Train on data",value=3,min=0,max=3,ste=0.001)),
-         column(width=3,numericInput("locknow","Local Knowledge",value=3,min=0,max=3,ste=0.001)),
-         column(width=3,numericInput("DoDL","Do DLMs",value=3,min=0,max=3,ste=0.001))),
-#         column(width=3,numericInput("Docomplex","Do complex",value=3,min=0,max=3,ste=0.001))),
-fluidRow(column(width=3,numericInput("Docomplex","Do complex",value=3,min=0,max=3,ste=0.001)),
-         column(width=3,numericInput("Modspecs","Modspecs",value=3,min=0,max=3,ste=0.001)),
-         column(width=3,numericInput("Gov","Governamce",value=2.5,min=0,max=3,ste=0.001)))
-
+# br(),
+# br(),
+# br(),
+# fluidRow(column(width=3,numericInput("traindata","Train on data",value=3,min=0,max=3,ste=0.001)),
+#          column(width=3,numericInput("locknow","Local Knowledge",value=3,min=0,max=3,ste=0.001)),
+#          column(width=3,numericInput("DoDL","Do DLMs",value=3,min=0,max=3,ste=0.001))),
+# #         column(width=3,numericInput("Docomplex","Do complex",value=3,min=0,max=3,ste=0.001))),
+# fluidRow(column(width=3,numericInput("Docomplex","Do complex",value=3,min=0,max=3,ste=0.001)),
+#          column(width=3,numericInput("Modspecs","Modspecs",value=3,min=0,max=3,ste=0.001)),
+#          column(width=3,numericInput("Gov","Governamce",value=2.5,min=0,max=3,ste=0.001)))
+# 
          
         ),
 
