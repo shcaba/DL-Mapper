@@ -2,12 +2,13 @@
 library(shiny)
 library(ggplot2)
 library(GGally)
-library(hrbrthemes)
-library(viridis)
-library(wesanderson)
+#library(hrbrthemes)
+#library(viridis)
+#library(wesanderson)
 library(plotly)
 library(reshape2)
 library(dplyr)
+library(ggsci)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output,session) {
@@ -429,8 +430,9 @@ shinyServer(function(input, output,session) {
       res<-ggplotly(ggplot(DR_plot,aes(Data,Resources,fill=factor(Scenario)))+
             geom_point(size=3,shape=DR_plot$Shapes)+
             theme(legend.position = "none")+
-            scale_fill_manual(values = wes_palette("Darjeeling2"))+
+            #scale_fill_manual(values = wes_palette("Zissou1",nrow(DL_parcoor_in)))+
             #scale_fill_viridis(discrete = TRUE)+
+            scale_fill_jco()+
             geom_vline(xintercept=1.5,color="red",lty=2)+
             geom_hline(yintercept=1.5,color="red",lty=2))
         res
@@ -463,7 +465,8 @@ shinyServer(function(input, output,session) {
                     alphaLines = 0.05,
                     title="Comparison of attribute scores across example fisheries")+
                     geom_line(size=1)+
-                    scale_color_manual(values = wes_palette("Darjeeling2"))+
+                    #scale_fill_manual(values = wes_palette("Zissou1",nrow(DL_parcoor)))+
+                    scale_color_jco()+
                     geom_point(size=2)+
                     xlab("")+
                     ylab("Attribute Score")+
@@ -603,7 +606,8 @@ shinyServer(function(input, output,session) {
                                           alphaLines = 0.05,
                                           title="Comparison of guiding principle scores across example fisheries")+
                                  geom_line(size=1)+
-                                 scale_color_manual(values = wes_palette("Darjeeling2"))+
+                                 #scale_fill_manual(values = wes_palette("Zissou1",nrow(Guidance_parcoor)))+
+                                 scale_color_jco()+
                                  geom_point(size=2)+
                                  xlab("")+
                                  ylab("Attribute Score")+

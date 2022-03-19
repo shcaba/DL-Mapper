@@ -30,13 +30,6 @@ shinyUI(fluidPage(
             fluidRow(column(width=6,selectizeInput("fishery_choice", label="Choose which fishery to score",choices = NULL)),
                 column(width=6,selectizeInput("fishery_compare", label="Choose which fisheries to compare.",choices = NULL, multiple=TRUE))),
             
-#            actionBttn(
- #               inputId = "Id104",
-  #              label = "Add fishery to comparison list", 
-   #             style = "material-flat",
-    #            color = "success"
-     #       ),
-            
             h3(p(strong("Data Attributes"))),
             fluidRow(column(width=6,sliderInput("D_type",
                         "Types",
@@ -145,11 +138,11 @@ shinyUI(fluidPage(
         # Show a plot of the generated distribution
         mainPanel(
             h4(p(strong("Five plots are created in the main panel:"))),
-            tags$ul(tags$li(h4(p(em("A lollipop plot detailing attribute scores for a specific fishery"))))),
-            tags$ul(tags$li(h4(p(em("A lollipop plot detailing guiding principles based on attribute scores"))))),
-            tags$ul(tags$li(h4(p(em("A biplot with the average data and resource scores on each axis for comparisons across fisheries"))))),
-            tags$ul(tags$li(h4(p(em("A parallel coordinate plot detailing attribute comparisons across fisheries"))))),
-            tags$ul(tags$li(h4(p(em("A parallel coordinate plot detailing guiding principles across fisheries"))))),
+            tags$ul(tags$li(h4(p(em("A lollipop plot detailing attribute scores for a specific fishery."))))),
+            tags$ul(tags$li(h4(p(em("A lollipop plot detailing guiding principles based on attribute scores. Higher scores are higher recommendations."))))),
+            tags$ul(tags$li(h4(p(em("A biplot with the average data and resource scores on each axis for comparisons across fisheries."))))),
+            tags$ul(tags$li(h4(p(em("A parallel coordinate plot detailing attribute comparisons across fisheries."))))),
+            tags$ul(tags$li(h4(p(em("A parallel coordinate plot detailing guiding principles across fisheries."))))),
             fluidRow(column(width=6,h3("Plot of individual attribute scores", align = "center")),
                      column(width=6,h3("Plot of strategic",tags$a(href="javascript:window.open('Guidance_definitions.html', '_blank','width=600,height=400')","guidance"),"based on attribute scores", align = "center"))),
             fluidRow(column(width=6,plotlyOutput("LolliPlot")),
@@ -181,6 +174,9 @@ fluidRow(column(width=9,""),
          column(width=3,downloadButton('downloadGuideScores', 'Download Guidance scores'))),
 br(),
 br()
+
+
+
 #            fluidRow(column(width=6,plotlyOutput("ParCoorPlot")),
 #                     column(width=6,plotlyOutput("ParCoorPlotGuidance"))),
 #fluidRow(column(width=3,downloadButton('downloadlollipopplots', 'Download DL Attributes plot')),
