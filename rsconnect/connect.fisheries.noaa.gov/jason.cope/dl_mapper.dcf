@@ -5,9 +5,9 @@ account: jason.cope
 server: connect.fisheries.noaa.gov
 hostUrl: https://connect.fisheries.noaa.gov/__api__
 appId: 105
-bundleId: 396
+bundleId: 397
 url: https://connect.fisheries.noaa.gov/content/e02f8bdf-0a4d-4096-8dc1-7c3e54627772/
-when: 1647660769.01146
-lastSyncTime: 1647660769.01146
+when: 1647667113.49132
+lastSyncTime: 1647667113.49132
 asMultiple: FALSE
 asStatic: FALSE

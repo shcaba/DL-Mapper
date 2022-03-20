@@ -3,12 +3,13 @@ library(shiny)
 library(ggplot2)
 library(GGally)
 #library(hrbrthemes)
-#library(viridis)
+library(viridis)
 #library(wesanderson)
 library(plotly)
 library(reshape2)
 library(dplyr)
-library(ggsci)
+#library(ggsci)
+library(gghighlight)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output,session) {
@@ -429,10 +430,14 @@ shinyServer(function(input, output,session) {
         }
       res<-ggplotly(ggplot(DR_plot,aes(Data,Resources,fill=factor(Scenario)))+
             geom_point(size=3,shape=DR_plot$Shapes)+
-            theme(legend.position = "none")+
+            theme(legend.position = "right")+
             #scale_fill_manual(values = wes_palette("Zissou1",nrow(DL_parcoor_in)))+
-            #scale_fill_viridis(discrete = TRUE)+
-            scale_fill_jco()+
+            scale_fill_viridis(discrete = TRUE)+
+            #scale_fill_jco()+
+            #gghighlight(max(DR_plot$Data) < 4,label_params = list(size = 4.5),
+            #            unhighlighted_params = list(size = 0.5, alpha = 0.5))+
+            guides(fill=guide_legend(ncol=2))+
+            labs(fill="Fishery")+  
             geom_vline(xintercept=1.5,color="red",lty=2)+
             geom_hline(yintercept=1.5,color="red",lty=2))
         res
@@ -466,10 +471,12 @@ shinyServer(function(input, output,session) {
                     title="Comparison of attribute scores across example fisheries")+
                     geom_line(size=1)+
                     #scale_fill_manual(values = wes_palette("Zissou1",nrow(DL_parcoor)))+
-                    scale_color_jco()+
+                    scale_color_viridis(discrete = TRUE)+
+                    #scale_color_jco()+
                     geom_point(size=2)+
                     xlab("")+
                     ylab("Attribute Score")+
+                    labs(color="Fishery")+
                     scale_x_discrete(guide = guide_axis(n.dodge = 2))+ 
                     theme_bw()+
                     theme(plot.title = element_text(size = 18),
@@ -607,10 +614,12 @@ shinyServer(function(input, output,session) {
                                           title="Comparison of guiding principle scores across example fisheries")+
                                  geom_line(size=1)+
                                  #scale_fill_manual(values = wes_palette("Zissou1",nrow(Guidance_parcoor)))+
-                                 scale_color_jco()+
+                                 scale_color_viridis(discrete = TRUE)+
+                                #scale_color_jco()+
                                  geom_point(size=2)+
                                  xlab("")+
                                  ylab("Attribute Score")+
+                                 labs(color="Fishery")+
                                  theme_bw()+
                                  scale_x_discrete(guide = guide_axis(n.dodge = 2))+ 
                                  theme(plot.title = element_text(size = 18),
