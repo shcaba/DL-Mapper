@@ -144,7 +144,7 @@ shinyUI(fluidPage(
             tags$ul(tags$li(h4(p(em("A parallel coordinate plot detailing attribute comparisons across fisheries."))))),
             tags$ul(tags$li(h4(p(em("A parallel coordinate plot detailing guiding principles across fisheries."))))),
             fluidRow(column(width=6,h3("Plot of individual attribute scores", align = "center")),
-                     column(width=6,h3("Plot of strategic",tags$a(href="javascript:window.open('Guidance_definitions.html', '_blank','width=600,height=400')","guidance"),"based on attribute scores", align = "center"))),
+                     column(width=6,h3("Plot of strategic",tags$a(href="javascript:window.open('Guidance_definitions.html', '_blank','width=600,height=400')","guidance"),"based on attribute",tags$a(href="javascript:window.open('ScoringofGuidancePrinciples.html', '_blank','width=600,height=400')","scores"), align = "center"))),
             fluidRow(column(width=6,plotlyOutput("LolliPlot")),
                     column(width=6,plotlyOutput("LolliPlot.principles"))),
             br(),
