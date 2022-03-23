@@ -22,9 +22,22 @@ shinyUI(fluidPage(
             tags$ul(tags$li(h4(p(em("2 = Moderate concern or constraint"))))),
             tags$ul(tags$li(h4(p(em("3 = High concern or constraint"))))),
             br(),
+
+            #Offer option for file input
+            h4(strong("File-based (csv) attribute scores?")),
+            fluidRow(column(width=6,fileInput('file1', 'Attribute score file',
+                                               accept = c(
+                                                   'text/csv',
+                                                   'text/comma-separated-values',
+                                                   'text/tab-separated-values',
+                                                   'text/plain',
+                                                   '.csv'
+                                               )
+            ))),
             
+            #br(),
+            h4(strong("User input attribute scoring")),
             h4(p(strong("Use the slide bar to score each attribute"))),
-            
             br(),
             fluidRow(column(width=12,textInput("Spp_lab","List of fisheries to score. Separate each fishery using a comma (e.g., A,B).", value=NULL))),
             fluidRow(column(width=6,selectizeInput("fishery_choice", label="Choose which fishery to score",choices = NULL)),

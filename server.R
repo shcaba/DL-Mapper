@@ -76,6 +76,10 @@ shinyServer(function(input, output,session) {
 ################################      
 ### Create objects for plots ###
 ################################
+    observeEvent(input$file1,{
+      user_scores<-read.csv(input$file1$datapath,check.names=FALSE)[,-1]
+      updateTextInput(session, "Spp_lab", label="List of fisheries to score. Separate each fishery using a comma (e.g., A,B).", value = user_scores[,1])
+    })    
     
     observeEvent(input$Spp_lab,{
         updateSelectizeInput(session, "fishery_choice", choices = strsplit(input$Spp_lab,split=",")[[1]], server = TRUE)
@@ -217,6 +221,15 @@ shinyServer(function(input, output,session) {
 #Create object that accumulates fisheries scores    
     DL_comps<-reactiveValues()
     DL_comps$scores<-DL_parcoor_comp
+    
+    observe({
+      if(!is.null(input$file1))
+      {
+        DL_comps$scores <- read.csv(input$file1$datapath,check.names=FALSE)[,-1]
+      }
+      
+    })
+      
     
 #Reactive updating of fisheries scores
     DL_parcoor_scores<-eventReactive(input$D_type|input$D_prez|input$D_bias|input$D_spp|input$D_spatial|input$D_temp|input$R_time|input$R_funds|input$R_cap|input$R_an2stocks,{
