@@ -92,7 +92,7 @@ shinyServer(function(input, output,session) {
       if(any(DL_comps$scores$Scenario==input$fishery_choice)){dtype.in<-DL_comps$scores[DL_comps$scores$Scenario==input$fishery_choice,3]}
       else (dtype.in<-3)
       updateSliderInput(session,"D_type",
-                        "Types",
+                        "Lack of Data Types",
                         min = 0,
                         max = 3,
                         step=0.1,
