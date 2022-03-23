@@ -139,8 +139,8 @@ shinyUI(fluidPage(
         mainPanel(
             h4(p(strong("Five plots are created in the main panel:"))),
             tags$ul(tags$li(h4(p(em("A lollipop plot detailing attribute scores for a specific fishery."))))),
-            tags$ul(tags$li(h4(p(em("A lollipop plot detailing guiding principles based on attribute scores. Higher scores are higher recommendations."))))),
-            tags$ul(tags$li(h4(p(em("A biplot with the average data and resource scores on each axis for comparisons across fisheries."))))),
+            tags$ul(tags$li(h4(p(em("A lollipop plot detailing guiding principles based on attribute scores. Higher scores are higher priority ranking."))))),
+            tags$ul(tags$li(h4(p(em("A biplot with the average data and resource scores on each axis for comparisons across fisheries. Points near the origin would have the least constraints across data and resource attributes. Those in the top right would show both high data and resource limitations."))))),
             tags$ul(tags$li(h4(p(em("A parallel coordinate plot detailing attribute comparisons across fisheries."))))),
             tags$ul(tags$li(h4(p(em("A parallel coordinate plot detailing guiding principles across fisheries."))))),
             fluidRow(column(width=6,h3("Plot of individual attribute scores", align = "center")),

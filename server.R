@@ -481,7 +481,8 @@ shinyServer(function(input, output,session) {
                     theme_bw()+
                     theme(plot.title = element_text(size = 18),
                           axis.title.y = element_text(size = 14),
-                          legend.position = "bottom")
+                          legend.position = "bottom",
+                          axis.text.x = element_text(angle=15))
                     
     ggParcoord_att<-ggplotly(gg)
 
