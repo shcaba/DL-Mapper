@@ -371,7 +371,7 @@ shinyServer(function(input, output,session) {
       if(mean(DR_plot_lollipop$Score[1:6])>=3){Principle.scores[1]<-3}
       if(mean(DR_plot_lollipop$Score[1:6])<3){Principle.scores[1]<-mean(DR_plot_lollipop$Score[c(1:6,9)])}
       #Improve data
-      Principle.scores[2]<-mean(DR_plot_lollipop$Score[c(1:6,10)])
+      Principle.scores[2]<-mean(DR_plot_lollipop$Score[c(1:6)])
       #Local Knowledge
       if(mean(DR_plot_lollipop$Score[1:6])>=3){Principle.scores[3]<-3}
       if(mean(DR_plot_lollipop$Score[1:6])<3){Principle.scores[3]<-mean(c(mean(DR_plot_lollipop$Score[1:6]),mean(DR_plot_lollipop$Score[7:10])))}
@@ -589,7 +589,7 @@ shinyServer(function(input, output,session) {
       Guidance_parcoor[rowMeans(DL_parcoor[,2:7])>=3,2]<-3
       Guidance_parcoor[rowMeans(DL_parcoor[,2:7])<3,2]<-rowMeans(DL_parcoor[rowMeans(DL_parcoor[,2:7])<3,c(2:7,10)])
       #Improve data
-      Guidance_parcoor[,3]<-rowMeans(DL_parcoor[,c(2:7,11)])
+      Guidance_parcoor[,3]<-rowMeans(DL_parcoor[,c(2:7)])
       #Local Knowledge
       Guidance_parcoor[rowMeans(DL_parcoor[,2:7])>=3,4]<-3
       Guidance_parcoor[rowMeans(DL_parcoor[,2:7])<3,4]<-rowMeans(cbind(rowMeans(DL_parcoor[rowMeans(DL_parcoor[,2:7])<3,2:7]),rowMeans(DL_parcoor[rowMeans(DL_parcoor[,2:7])<3,8:11])))
