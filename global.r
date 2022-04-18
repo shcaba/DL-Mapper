@@ -17,7 +17,7 @@ scores<-data.frame(matrix(c(rep(0,dnum+rnum),
                           4,dnum+rnum,byrow = TRUE))
 #scores.fish<-data.frame(matrix(rep(0,(dnum+rnum)*length(fishery.labs)),
 #                               length(fishery.labs),dnum+rnum,byrow = TRUE))
-colnames(scores)<-c("Data: Type","Data: Precision","Data: Bias","Data: Species ID","Data: Temporal","Data: Coverage","Res: Time","Res: Funding","Res: Capacity","Res: analysts/stocks")
+colnames(scores)<-c("Data_Type","Data_Precision","Data_Bias","Data_Species ID","Data_Spatial","Data_Temporal","Res_Time","Res_Funding","Res_Capacity","Res_analysts_stocks")
 DL_parcoor_comp<-data.frame(Scenario=c("No constraints","Resources constraints","Data constraints","Data & Resource constraints"),Shapes=21,scores)
 #DL_parcoor_comp.fish<-data.frame(Scenario=fishery.labs,Shapes=8,scores.fish)
 
