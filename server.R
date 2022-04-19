@@ -441,6 +441,9 @@ shinyServer(function(input, output,session) {
           Scenario_comp<-DL_parcoor_in$Scenario%in%c(DL_parcoor_in$Scenario[1:4],input$fishery_compare)
           DR_plot<-data.frame(Scenario=DL_parcoor_in$Scenario[Scenario_comp],Shapes=DL_parcoor_in$Shapes[Scenario_comp],Data=rowMeans(DL_parcoor_in[Scenario_comp,3:8]),Resources=rowMeans(DL_parcoor_in[Scenario_comp,9:12]))
         }
+      
+      m <- list(l = 50,r = 50,b = 100,t = 100,pad = 4)
+
       res<-ggplotly(ggplot(DR_plot,aes(Data,Resources,fill=factor(Scenario)))+
             geom_point(size=3,shape=DR_plot$Shapes)+
             theme(legend.position = "right")+
@@ -453,7 +456,7 @@ shinyServer(function(input, output,session) {
             labs(fill="Fishery")+  
             geom_vline(xintercept=1.5,color="red",lty=2)+
             geom_hline(yintercept=1.5,color="red",lty=2))
-        res
+        res<-res %>% layout(autosize = F, width = 800, height = 500)
     })
 
     #Run attributes parallel coordinate plot
@@ -495,10 +498,10 @@ shinyServer(function(input, output,session) {
                     theme(plot.title = element_text(size = 18),
                           axis.title.y = element_text(size = 14),
                           legend.position = "bottom",
-                          axis.text.x = element_text(angle=15))
+                          axis.text.x = element_text(angle=15,size=12))
                     
     ggParcoord_att<-ggplotly(gg)
-
+    ggParcoord_att<-ggParcoord_att %>% layout(autosize = F, width = 1600, height = 500)
 #        DL_parcoor$colorsin<-1:nrow(DL_parcoor)
 #         plot_ly(DL_parcoor,type = 'parcoords',labelside="bottom",labelfont=list(size=10),labelangle=-15,
 #                 line = list(color = ~colorsin,
@@ -639,9 +642,10 @@ shinyServer(function(input, output,session) {
                                  theme(plot.title = element_text(size = 18),
                                        axis.title.y = element_text(size = 14),
                                        legend.position = "bottom",
-                                       axis.text.x = element_text(angle=15))
+                                       axis.text.x = element_text(angle=15,size=12))
       
       ggParcoord_guide<-ggplotly(gg)
+      ggParcoord_guide<-ggParcoord_guide %>% layout(autosize = F, width = 1600, height = 500)
       
       # p<-plot_ly(Guidance_parcoor,type = 'parcoords',name="Test",labelside="bottom",labelfont=list(size=10),labelangle=-15,
       #         line = list(color = ~colorsin,

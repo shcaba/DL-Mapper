@@ -1,5 +1,5 @@
 ,Scenario,Shapes,Data_Type,Data_Precision,Data_Bias,Data_Species.ID,Data_Spatial,Data_Temporal,Res_Time,Res_Funding,Res_Capacity,Res_analysts_stocks
-1,No constraints,21,3,3,3,3,3,3,3,3,3,3
+1,No constraints,21,0,0,0,0,0,0,0,0,0,0
 2,Resources constraints,21,0,0,0,0,0,0,3,3,3,3
 3,Data constraints,21,3,3,3,3,3,3,0,0,0,0
 4,Data & Resource constraints,21,3,3,3,3,3,3,3,3,3,3
